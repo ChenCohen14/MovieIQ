@@ -16,7 +16,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".GameScreenActivity"></activity>
+        <activity android:name=".GameScreenActivity" />
+        <activity android:name=".TiersActivity" />
+        <activity android:name=".QuestionsActivity"></activity>
     </application>
 
 </manifest>

@@ -3,4 +3,9 @@
     <string name="enter_your_name">Enter Your Name</string>
     <string name="points">Points:</string>
     <string name="submit">Submit</string>
+    <string name="tier_1">Tier 1</string>
+    <string name="tier_2">Tier 2</string>
+    <string name="tier_3">Tier 3</string>
+    <string name="tier_4">Tier 4</string>
+    <string name="tier_5">Tier 5</string>
 </resources>

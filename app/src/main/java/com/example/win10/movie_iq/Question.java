@@ -4,13 +4,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Question implements Serializable {
-    public String question;
-    public String answer;
-    public static final int POINTS = 10;
-    public int currentPoints = POINTS;
+    private String question;
+    private String answer;
+    private static final int POINTS = 10;
+    private int currentPoints = POINTS;
 
-    public int tier = 1;
-    public ArrayList<String> hints = new ArrayList<>();
+    private int tier = 1;
+    private ArrayList<String> hints = new ArrayList<>();
+    private ArrayList<String> facts = new ArrayList<>();
+
     public Question(){}
 
     public Question (String question, String answer){
@@ -59,7 +61,13 @@ public class Question implements Serializable {
     }
 
 
+    public ArrayList<String> getHints() {
+        return hints;
+    }
 
+    public void setHints(ArrayList<String> hints) {
+        this.hints = hints;
+    }
 
     public void setTier(int tier) {
         this.tier = tier;
@@ -67,6 +75,12 @@ public class Question implements Serializable {
 
     @Override
     public String toString() {
-        return "Question = " + question + " answer = " + answer;
+        return "Question{" +
+                "question='" + question + '\'' +
+                ", answer='" + answer + '\'' +
+                ", currentPoints=" + currentPoints +
+                ", tier=" + tier +
+                ", hints=" + hints +
+                '}';
     }
 }

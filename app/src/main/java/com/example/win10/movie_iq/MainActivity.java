@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClick(View view){
-        Intent intent = new Intent(this, GameScreenActivity.class);
+        Intent intent = new Intent(this, TiersActivity.class);
         final EditText nameEditText = findViewById(R.id.playerNameEditText);
         String playerName = nameEditText.getText().toString();
         intent.putExtra("playerName", playerName);
