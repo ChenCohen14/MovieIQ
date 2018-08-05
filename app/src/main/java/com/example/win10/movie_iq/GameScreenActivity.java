@@ -24,45 +24,48 @@ public class GameScreenActivity extends AppCompatActivity {
     private static final String TAG = "GameScreenActivity";
 
     private TextView questionText;
-
-    private VideoView vid ;
-
-    DatabaseReference databaseReference;
+    private Question theQuestion;
+//
+//    DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_screen);
-        //updateQuestion();
-        vid = findViewById(R.id.videoView);
-        vid.setVisibility(View.GONE);
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("questions");
+        String chosenBt = getIntent().getExtras().getString("chosenBt");
+        theQuestion = (Question) getIntent().getSerializableExtra(chosenBt);
 
-        Button getQ = findViewById(R.id.getQ);
-        final Question[] q = {new Question()};
-        getQ.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "getQ clicked");
-               databaseReference.child("tier1").child("0").addListenerForSingleValueEvent(new ValueEventListener() {
-                   @Override
-                   public void onDataChange(DataSnapshot dataSnapshot) {
-                       Log.d(TAG, "loading a question");
-                       q[0] = dataSnapshot.getValue(Question.class);
-                       Toast.makeText(GameScreenActivity.this, "GOT THE QUESTION", Toast.LENGTH_SHORT).show();
-                       Log.d(TAG, "Question parsed is : " + q[0]);
-                   }
+        questionText = findViewById(R.id.questionTextView);
+        questionText.setText(theQuestion.getQuestion());
 
-                   @Override
-                   public void onCancelled(DatabaseError databaseError) {
-
-                   }
-               });
-            }
-        });
-
-    }
+//
+//        databaseReference = FirebaseDatabase.getInstance().getReference("questions");
+//
+//        Button getQ = findViewById(R.id.getQ);
+//        final Question[] q = {new Question()};
+//        getQ.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.d(TAG, "getQ clicked");
+//               databaseReference.child("tier1").child("0").addListenerForSingleValueEvent(new ValueEventListener() {
+//                   @Override
+//                   public void onDataChange(DataSnapshot dataSnapshot) {
+//                       Log.d(TAG, "loading a question");
+//                       q[0] = dataSnapshot.getValue(Question.class);
+//                       Toast.makeText(GameScreenActivity.this, "GOT THE QUESTION", Toast.LENGTH_SHORT).show();
+//                       Log.d(TAG, "Question parsed is : " + q[0]);
+//                   }
+//
+//                   @Override
+//                   public void onCancelled(DatabaseError databaseError) {
+//
+//                   }
+//               });
+//            }
+//        });
+//
+//    }
 
 //    private void updateQuestion(){
 //        questionText = findViewById(R.id.questionTextView);
@@ -70,16 +73,16 @@ public class GameScreenActivity extends AppCompatActivity {
 //
 //    }
 
-    public void onClick (View view){
-
-        String id = databaseReference.push().getKey();
-
-        Question q = new Question("","");
-        HashMap <Integer,Question> lst = new HashMap<>();
-        lst.put(0,q);
-        databaseReference.child("tier1").child(""+0).setValue(lst.get(0));
-
-        Toast.makeText(this,"q added",Toast.LENGTH_LONG).show();
+//    public void onClick (View view){
+//
+//        String id = databaseReference.push().getKey();
+//
+//        Question q = new Question("","");
+//        HashMap <Integer,Question> lst = new HashMap<>();
+//        lst.put(0,q);
+//        databaseReference.child("tier1").child(""+0).setValue(lst.get(0));
+//
+//        Toast.makeText(this,"q added",Toast.LENGTH_LONG).show();
 
 
 //        final EditText answerEditText = findViewById(R.id.answerEditText);
