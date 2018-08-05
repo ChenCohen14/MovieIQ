@@ -35,35 +35,47 @@ public class TiersActivity extends AppCompatActivity {
 
     }
 
-    public void onClick(View view) {
-        Intent intent = new Intent(this, QuestionsActivity.class);
+    public void onClick(View view) throws InterruptedException {
+        final Intent intent = new Intent(this, QuestionsActivity.class);
         final Button clickedBt = findViewById(view.getId());
         final String chosenTier = clickedBt.getText().toString().toLowerCase().replaceAll(" ", "");
         ;
-
-
-            databaseReference.child(chosenTier).child("0").addListenerForSingleValueEvent(new ValueEventListener() {
+        questions.clear();
+        for (int i = 0; i < QUESTION_ARR_SIZE; i++) {
+            databaseReference.child(chosenTier).child(Integer.toString(i)).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Log.d(TAG, "loading a question");
                     Question q = new Question();
                     q = dataSnapshot.getValue(Question.class);
                     questions.add(q);
-                    Toast.makeText(TiersActivity.this, "ADDED" + questions.size(), Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, "Question parsed is : " + q);
+                  //  Toast.makeText(TiersActivity.this, "ADDED" + questions.size(), Toast.LENGTH_SHORT).show();
+                   // Log.d(TAG, "Question parsed is : " + q);
+
+                    if(questions.size() == QUESTION_ARR_SIZE) {
+                        intent.putExtra("questions",questions);
+                        startActivity(intent);
+
+                    }
                 }
+
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
 
                 }
             });
+        }
 
 
-        intent.putExtra("questions", questions);
-
-        Toast.makeText(this, "GO TO NEXT ACTIVITY", Toast.LENGTH_SHORT).show();
-        startActivity(intent);
+//        if (questions.size() == 0) {
+//            Thread.sleep(7000);
+//
+//        }
+//        if (questions.size() > 0) {
+//            Toast.makeText(this, "GO TO NEXT ACTIVITY", Toast.LENGTH_SHORT).show();
+//
+//        }
     }
 
 

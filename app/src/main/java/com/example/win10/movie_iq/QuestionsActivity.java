@@ -30,10 +30,13 @@ public class QuestionsActivity extends AppCompatActivity {
         questions = (ArrayList<Question>) intent.getSerializableExtra("questions");
         questionsActivityGrid = findViewById(R.id.questionsActivityGrid);
 
-        questionsActivityGrid.setColumnCount(0);
+        questionsActivityGrid.setColumnCount(1);
         questionsActivityGrid.setRowCount(questions.size());
+        //Toast.makeText(this,questions.get(0)+"",Toast.LENGTH_SHORT).show();
+
 
         for (int i = 0; i < questions.size(); i++){
+           Toast.makeText(this, "Question parsed is : " + questions.get(i),Toast.LENGTH_SHORT).show();
             questionsActivityGrid.addView(new Button(this));
         }
 
