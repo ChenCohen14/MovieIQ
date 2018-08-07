@@ -59,5 +59,18 @@
         android:text="@string/tier_5"
         android:onClick="onClick"/>
 
+    <Button
+        android:id="@+id/logout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="72dp"
+        android:background="@color/colorAccent"
+        android:onClick="onLogout"
+        android:text="@string/btn_sign_out"
+        tools:layout_editor_absoluteX="148dp"
+        tools:layout_editor_absoluteY="283dp" />
+
 
 </RelativeLayout>
