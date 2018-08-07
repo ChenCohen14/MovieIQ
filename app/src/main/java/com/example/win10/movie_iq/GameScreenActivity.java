@@ -39,6 +39,7 @@ public class GameScreenActivity extends AppCompatActivity {
     private String answer;
     private boolean[] isHint = new boolean[3];
     private boolean[] isFact = new boolean[3];
+    private static final int FACTS_SIZE = 3;
     private ArrayList<String> solutions;
 
 
@@ -115,7 +116,7 @@ public class GameScreenActivity extends AppCompatActivity {
         factsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for (int i = 0; i < solutions.size(); i++) {
+                for (int i = 0; i < FACTS_SIZE; i++) {
                     String fact = theQuestion.getFacts().get(i);
                     if (isFact[i] == false) {
                         if (i == 0) {
