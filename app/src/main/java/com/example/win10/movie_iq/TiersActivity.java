@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,7 +25,8 @@ public class TiersActivity extends AppCompatActivity {
 
     private ArrayList<Question> questions;
     private DatabaseReference databaseReference;
-
+    private ProgressBar prg;
+    private int progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +34,9 @@ public class TiersActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tiers);
         questions = new ArrayList<>();
         databaseReference = FirebaseDatabase.getInstance().getReference("questions");
-
+        prg = findViewById(R.id.progressBarTiers);
+        prg.setVisibility(View.INVISIBLE);
+        progress = 0;
 
     }
 
@@ -42,14 +46,22 @@ public class TiersActivity extends AppCompatActivity {
         final String chosenTier = clickedBt.getText().toString().toLowerCase().replaceAll(" ", "");
         ;
         questions.clear();
-        for (int i = 0; i < QUESTION_ARR_SIZE; i++) {
-            databaseReference.child(chosenTier).child(Integer.toString(i)).addListenerForSingleValueEvent(new ValueEventListener() {
+
+        prg.setVisibility(View.VISIBLE);
+        prg.setProgress(0);
+        for (int i = 1; i <= QUESTION_ARR_SIZE; i++) {
+            databaseReference.child(chosenTier).child(Integer.toString(i-1)).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Log.d(TAG, "loading a question");
                     Question q = new Question();
                     q = dataSnapshot.getValue(Question.class);
                     questions.add(q);
+
+                    progress += 100/QUESTION_ARR_SIZE;
+                    prg.setProgress(progress);
+
+
                   //  Toast.makeText(TiersActivity.this, "ADDED" + questions.size(), Toast.LENGTH_SHORT).show();
                    // Log.d(TAG, "Question parsed is : " + q);
 
@@ -85,4 +97,10 @@ public class TiersActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        prg.setProgress(0);
+        prg.setVisibility(View.INVISIBLE);
+    }
 }
