@@ -18,6 +18,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TiersActivity extends AppCompatActivity {
     private static final String TAG = "TiersActivity";
@@ -27,6 +29,7 @@ public class TiersActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private ProgressBar prg;
     private int progress;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +41,12 @@ public class TiersActivity extends AppCompatActivity {
         prg.setVisibility(View.INVISIBLE);
         progress = 0;
 
+
+
+
     }
 
-    public void onClick(View view) throws InterruptedException {
+    public void onClick(View view) {
         final Intent intent = new Intent(this, QuestionsActivity.class);
         final Button clickedBt = findViewById(view.getId());
         final String chosenTier = clickedBt.getText().toString().toLowerCase().replaceAll(" ", "");
@@ -50,7 +56,7 @@ public class TiersActivity extends AppCompatActivity {
         prg.setVisibility(View.VISIBLE);
         prg.setProgress(0);
         for (int i = 1; i <= QUESTION_ARR_SIZE; i++) {
-            databaseReference.child(chosenTier).child(Integer.toString(i-1)).addListenerForSingleValueEvent(new ValueEventListener() {
+            databaseReference.child(chosenTier).child(Integer.toString(i - 1)).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Log.d(TAG, "loading a question");
@@ -58,15 +64,15 @@ public class TiersActivity extends AppCompatActivity {
                     q = dataSnapshot.getValue(Question.class);
                     questions.add(q);
 
-                    progress += 100/QUESTION_ARR_SIZE;
+                    progress += 100 / QUESTION_ARR_SIZE;
                     prg.setProgress(progress);
 
 
-                  //  Toast.makeText(TiersActivity.this, "ADDED" + questions.size(), Toast.LENGTH_SHORT).show();
-                   // Log.d(TAG, "Question parsed is : " + q);
+                    //  Toast.makeText(TiersActivity.this, "ADDED" + questions.size(), Toast.LENGTH_SHORT).show();
+                    // Log.d(TAG, "Question parsed is : " + q);
 
-                    if(questions.size() == QUESTION_ARR_SIZE) {
-                        intent.putExtra("questions",questions);
+                    if (questions.size() == QUESTION_ARR_SIZE) {
+                        intent.putExtra("questions", questions);
                         startActivity(intent);
 
                     }
@@ -103,4 +109,7 @@ public class TiersActivity extends AppCompatActivity {
         prg.setProgress(0);
         prg.setVisibility(View.INVISIBLE);
     }
+
+
+
 }

@@ -1,24 +1,32 @@
 package com.example.win10.movie_iq;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-public class User {
-    private String userName;
-    private String uID;
+public class User implements Serializable {
+    private String userEmail;
     private int totalPoints;
     private int pointsPerQuestion;
-    private ArrayList<UserTierInfo> currentState;
 
-    public User(){
+    public User() {
+    }
+
+    public User(String userEmail) {
+        this.userEmail = userEmail;
+        totalPoints = 0;
+        pointsPerQuestion = 10;
+
 
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
-    public void setuID(String uID) {
-        this.uID = uID;
+    public String getUserEmail() {
+        return userEmail;
     }
 
     public void setTotalPoints(int totalPoints) {
@@ -29,17 +37,6 @@ public class User {
         this.pointsPerQuestion = pointsPerQuestion;
     }
 
-    public void setCurrentState(ArrayList<UserTierInfo> currentState) {
-        this.currentState = currentState;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public String getuID() {
-        return uID;
-    }
 
     public int getTotalPoints() {
         return totalPoints;
@@ -49,7 +46,5 @@ public class User {
         return pointsPerQuestion;
     }
 
-    public ArrayList<UserTierInfo> getCurrentState() {
-        return currentState;
-    }
+
 }

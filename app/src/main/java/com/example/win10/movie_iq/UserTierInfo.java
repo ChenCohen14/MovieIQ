@@ -1,12 +1,14 @@
 package com.example.win10.movie_iq;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
-public class UserTierInfo {
+public class UserTierInfo implements Serializable {
     private int tierNum;
     private ArrayList<Integer> answeredQuestions;
-    private HashMap<Integer,Integer> hintTakedIndex;
+    private Map<Integer,Integer> hintTakedIndex;
     private boolean isOpen;
 
     public UserTierInfo(){
@@ -24,7 +26,7 @@ public class UserTierInfo {
         return answeredQuestions;
     }
 
-    public HashMap<Integer, Integer> getHintTakedIndex() {
+    public Map<Integer, Integer> getHintTakedIndex() {
         return hintTakedIndex;
     }
 
@@ -40,7 +42,7 @@ public class UserTierInfo {
         this.answeredQuestions = answeredQuestions;
     }
 
-    public void setHintTakedIndex(HashMap<Integer, Integer> hintTakedIndex) {
+    public void setHintTakedIndex(Map<Integer, Integer> hintTakedIndex) {
         this.hintTakedIndex = hintTakedIndex;
     }
 

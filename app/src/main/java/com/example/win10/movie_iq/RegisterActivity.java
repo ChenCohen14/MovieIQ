@@ -23,8 +23,6 @@ public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
 
-    private String userId;
-    private String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +51,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void onRegisterClicked(View view) {
-        String emailInput = inputEmail.getText().toString().trim();
+        final String emailInput = inputEmail.getText().toString().trim();
         String password = inputPassword.getText().toString().trim();
         final String username = inputUsername.getText().toString().trim();
 
@@ -94,7 +92,13 @@ public class RegisterActivity extends AppCompatActivity {
                     Log.e("MyTag", task.getException().toString());
                 } else {
 
-                    startActivity(new Intent(RegisterActivity.this, TiersActivity.class));
+
+                    Intent intent = new Intent(RegisterActivity.this, TiersActivity.class);
+                    intent.putExtra("email", emailInput);
+
+
+
+                    startActivity(intent);
                     finish();
                 }
             }
