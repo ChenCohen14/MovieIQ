@@ -15,6 +15,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -22,6 +27,7 @@ public class RegisterActivity extends AppCompatActivity {
     private ProgressBar progressBar;
 
     private FirebaseAuth mAuth;
+    private DatabaseReference databaseReference;
 
 
     @Override
@@ -31,6 +37,9 @@ public class RegisterActivity extends AppCompatActivity {
 
         //Get Firebase instances
         mAuth = FirebaseAuth.getInstance();
+
+        databaseReference = FirebaseDatabase.getInstance().getReference("users");
+
 
         // if already logged in go sign in screen
         if (mAuth.getCurrentUser() != null) {
@@ -78,32 +87,52 @@ public class RegisterActivity extends AppCompatActivity {
         progressBar.setVisibility(View.VISIBLE);
         //create user
         mAuth.createUserWithEmailAndPassword(emailInput, password)
-        .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                Toast.makeText(RegisterActivity.this, "createUserWithEmail:onComplete:" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
-                progressBar.setVisibility(View.GONE);
-                // If sign in fails, display a message to the user. If sign in succeeds
-                // the auth state listener will be notified and logic to handle the
-                // signed in user can be handled in the listener.
-                if (!task.isSuccessful()) {
-                    Toast.makeText(RegisterActivity.this, "Authentication failed." + task.getException(),
-                            Toast.LENGTH_LONG).show();
-                    Log.e("MyTag", task.getException().toString());
-                } else {
+                .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Toast.makeText(RegisterActivity.this, "createUserWithEmail:onComplete:" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.GONE);
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(RegisterActivity.this, "Authentication failed." + task.getException(),
+                                    Toast.LENGTH_LONG).show();
+                            Log.e("MyTag", task.getException().toString());
+                        } else {
 
 
-                    Intent intent = new Intent(RegisterActivity.this, TiersActivity.class);
-                    intent.putExtra("email", emailInput);
+                            Intent intent = new Intent(RegisterActivity.this, TiersActivity.class);
 
 
+                            String userID = databaseReference.push().getKey();
+                            User theUser = new User(emailInput, username, userID);
+                            databaseReference.child(theUser.getUserID()).setValue(theUser);
+                            intent.putExtra("user", theUser);
 
-                    startActivity(intent);
-                    finish();
-                }
-            }
-        });
+
+                            databaseReference = FirebaseDatabase.getInstance().getReference("userCount");
+                            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    int currentCount = dataSnapshot.getValue(Integer.class);
+                                    currentCount++;
+                                    databaseReference.setValue(currentCount);
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
+                            startActivity(intent);
+                            finish();
+                        }
+                    }
+                });
     }
+
 
     public void onLoginClicked(View view) {
         startActivity(new Intent(this, LoginActivity.class));

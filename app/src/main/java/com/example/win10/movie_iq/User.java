@@ -7,18 +7,38 @@ import java.util.Map;
 
 public class User implements Serializable {
     private String userEmail;
+    private String name;
+    private String userID;
     private int totalPoints;
     private int pointsPerQuestion;
 
     public User() {
     }
 
-    public User(String userEmail) {
+    public User(String userEmail, String name, String userID) {
         this.userEmail = userEmail;
+        this.name = name;
+        this.userID = userID;
         totalPoints = 0;
         pointsPerQuestion = 10;
 
 
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 
     public void setUserEmail(String userEmail) {
