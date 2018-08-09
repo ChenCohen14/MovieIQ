@@ -107,27 +107,30 @@ public class RegisterActivity extends AppCompatActivity {
 
                             String userID = databaseReference.push().getKey();
                             User theUser = new User(emailInput, username, userID);
-                            databaseReference.child(theUser.getUserID()).setValue(theUser);
+                            String transMail = theUser.getUserEmail().replace(".","_");
+                            databaseReference.child(transMail).setValue(theUser);
                             intent.putExtra("user", theUser);
-
-
-                            databaseReference = FirebaseDatabase.getInstance().getReference("userCount");
-                            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    int currentCount = dataSnapshot.getValue(Integer.class);
-                                    currentCount++;
-                                    databaseReference.setValue(currentCount);
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
-                                }
-                            });
 
                             startActivity(intent);
                             finish();
+
+//
+//                            databaseReference = FirebaseDatabase.getInstance().getReference("userCount");
+//                            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+//                                @Override
+//                                public void onDataChange(DataSnapshot dataSnapshot) {
+//                                    int currentCount = dataSnapshot.getValue(Integer.class);
+//                                    currentCount++;
+//                                    databaseReference.setValue(currentCount);
+//                                }
+//
+//                                @Override
+//                                public void onCancelled(DatabaseError databaseError) {
+//
+//                                }
+//                            });
+
+//
                         }
                     }
                 });

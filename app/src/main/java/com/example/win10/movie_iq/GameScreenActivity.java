@@ -72,6 +72,9 @@ public class GameScreenActivity extends AppCompatActivity {
         tierText.setText("Tier " + Integer.toString(theQuestion.getTier()));
         pointsText.setText("Points " + Integer.toString(theQuestion.getCurrentPoints()));
 
+        User theUser = (User) getIntent().getSerializableExtra("user");
+        Toast.makeText(this, "GAMESCREEN"+ theUser, Toast.LENGTH_LONG).show();
+
         hintBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

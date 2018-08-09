@@ -67,4 +67,14 @@ public class User implements Serializable {
     }
 
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "userEmail='" + userEmail + '\'' +
+                ", name='" + name + '\'' +
+                ", userID='" + userID + '\'' +
+                ", totalPoints=" + totalPoints +
+                ", pointsPerQuestion=" + pointsPerQuestion +
+                '}';
+    }
 }

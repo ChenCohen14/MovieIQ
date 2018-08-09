@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -13,6 +14,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -20,9 +26,16 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private ProgressBar progressBar;
 
+    private DatabaseReference databaseReference;
+    private Intent intent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        databaseReference = FirebaseDatabase.getInstance().getReference("users");
+
 
         //Get Firebase auth instance
         mAuth = FirebaseAuth.getInstance();
@@ -39,6 +52,10 @@ public class LoginActivity extends AppCompatActivity {
         inputEmail = (EditText) findViewById(R.id.email);
         inputPassword = (EditText) findViewById(R.id.password);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
+
+
+        intent = new Intent(LoginActivity.this, TiersActivity.class);
+
     }
 
     @Override
@@ -48,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void loginButtonClicked(View view) {
-        String email = inputEmail.getText().toString();
+        final String email = inputEmail.getText().toString();
         final String password = inputPassword.getText().toString();
 
         if (TextUtils.isEmpty(email)) {
@@ -80,9 +97,27 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(LoginActivity.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
                     }
                 } else {
-                    Intent intent = new Intent(LoginActivity.this, TiersActivity.class);
-                    startActivity(intent);
-                    finish();
+
+                    String transMail = email.replace(".","_");
+                    databaseReference.child(transMail).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            User theUser = dataSnapshot.getValue(User.class);
+
+                            intent.putExtra("user", theUser);
+                            startActivity(intent);
+                            finish();
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+                    //Intent intent = new Intent(LoginActivity.this, TiersActivity.class);
+//                    startActivity(intent);
+//                    finish();
                 }
             }
         });

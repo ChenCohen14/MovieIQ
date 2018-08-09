@@ -27,6 +27,8 @@ public class QuestionsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_questions);
 
         Intent intent = getIntent();
+        User theUser = (User) intent.getSerializableExtra("user");
+        Toast.makeText(this, "QUESTIONACTIVITY!! "+theUser, Toast.LENGTH_LONG).show();
 
         questions = (ArrayList<Question>) intent.getSerializableExtra("questions");
         questionsActivityGrid = findViewById(R.id.questionsActivityGrid);
@@ -35,6 +37,8 @@ public class QuestionsActivity extends AppCompatActivity {
         questionsActivityGrid.setRowCount(questions.size());
         //Toast.makeText(this,questions.get(0)+"",Toast.LENGTH_SHORT).show();
         final Intent questionIntent = new Intent(this, GameScreenActivity.class);
+
+        questionIntent.putExtra("user", theUser);
 
         for (int i = 0; i < questions.size(); i++) {
             Toast.makeText(this, "Question parsed is : " + questions.get(i), Toast.LENGTH_SHORT).show();
@@ -47,7 +51,7 @@ public class QuestionsActivity extends AppCompatActivity {
             bt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String chosenBt = bt.getText().toString().toLowerCase().replaceAll(" ", "");
+                    String chosenBt = bt.getText().toString().toLowerCase().replace(" ", "");
                     questionIntent.putExtra("chosenBt", chosenBt);
                     startActivity(questionIntent);
                 }

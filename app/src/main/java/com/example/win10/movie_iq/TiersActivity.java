@@ -29,6 +29,8 @@ public class TiersActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private ProgressBar prg;
     private int progress;
+    private Intent intent;
+    private User theUser;
 
 
     @Override
@@ -41,6 +43,15 @@ public class TiersActivity extends AppCompatActivity {
         prg.setVisibility(View.INVISIBLE);
         progress = 0;
 
+        theUser = (User) getIntent().getSerializableExtra("user");
+        Toast.makeText(this, "TIERSACTIVITY!! "+theUser, Toast.LENGTH_LONG).show();
+
+//        intent = new Intent(this, QuestionsActivity.class);
+//
+//        User theUser = (User) getIntent().getSerializableExtra("user");
+//        Toast.makeText(this, theUser+"", Toast.LENGTH_LONG).show();
+
+
 
 
 
@@ -48,6 +59,9 @@ public class TiersActivity extends AppCompatActivity {
 
     public void onClick(View view) {
         final Intent intent = new Intent(this, QuestionsActivity.class);
+
+        intent.putExtra("user", theUser);
+
         final Button clickedBt = findViewById(view.getId());
         final String chosenTier = clickedBt.getText().toString().toLowerCase().replaceAll(" ", "");
         ;
@@ -73,6 +87,9 @@ public class TiersActivity extends AppCompatActivity {
 
                     if (questions.size() == QUESTION_ARR_SIZE) {
                         intent.putExtra("questions", questions);
+
+
+
                         startActivity(intent);
 
                     }
