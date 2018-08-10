@@ -45,6 +45,7 @@ public class GameScreenActivity extends AppCompatActivity {
     private UserTierInfo userTierInfo;
 
     DatabaseReference databaseReference;
+    private int numOfHintsTaked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +90,10 @@ public class GameScreenActivity extends AppCompatActivity {
         if (questionThatOpenedBefore != null)
             theQuestion = questionThatOpenedBefore;
 
+        numOfHintsTaked = userTierInfo.getNumOfHintsTaked(theQuestion.getAnswer());
+
+        exposeHints(numOfHintsTaked);
+
         hintBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,10 +102,9 @@ public class GameScreenActivity extends AppCompatActivity {
                 //DatabaseReference condRef = databaseReference.child("tier"+Integer.toString(theQuestion.getTier())).child("0").child("currentPoints");
 
                 // condRef.setValue(5);
-                int j = userTierInfo.getNumOfHintsTaked(theQuestion.getAnswer());
-                for (int k = 0; k < j; k++)
-                    isHint[k] = true;
-                for (int i = j; i < isHint.length; i++) {
+                // int j = userTierInfo.getNumOfHintsTaked(theQuestion.getAnswer());
+
+                for (int i = numOfHintsTaked; i < isHint.length; i++) {
                     String hint = theQuestion.getHints().get(i);
                     if (isHint[i] == false) {
                         theQuestion.reducePoints();
@@ -199,4 +203,40 @@ public class GameScreenActivity extends AppCompatActivity {
 //            Toast.makeText(this, "Wrong Answer", Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
+
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        exposeHints(numOfHintsTaked);
+    }
+
+    public void exposeHints(int limit) {
+        for (int k = 0; k < limit; k++)
+            isHint[k] = true;
+        int i = 0;
+        while (i < isHint.length && isHint[i] == true) {
+            String hint = theQuestion.getHints().get(i);
+
+            pointsText.setText("Points " + Integer.toString(theQuestion.getCurrentPoints()));
+            if (i == 0)
+                hintText1.setText(hint);
+            else if (i == 1)
+                hintText2.setText(hint);
+            else if (i == 2)
+                hintText3.setText(hint);
+            i++;
+        }
+
+
+
+
+    }
+
 }
+
+

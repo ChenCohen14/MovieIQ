@@ -70,6 +70,8 @@ public class QuestionsActivity extends AppCompatActivity {
                             if (user.getUserTierInfos() != null)
                                 questionIntent.putExtra("user", user);
 
+                            startActivity(questionIntent);
+
                         }
 
                         @Override
@@ -78,7 +80,7 @@ public class QuestionsActivity extends AppCompatActivity {
                         }
                     });
 
-                    startActivity(questionIntent);
+                    //startActivity(questionIntent);
                 }
             });
         }
