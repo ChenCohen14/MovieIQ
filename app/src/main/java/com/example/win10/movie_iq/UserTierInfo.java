@@ -65,8 +65,9 @@ public class UserTierInfo implements Serializable {
     }
 
     public int getNumOfHintsTaked(String answerOfQuestion){
-        if(hintTakedIndex.size() == 0)
+        if(hintTakedIndex.size() == 0 || hintTakedIndex.get(answerOfQuestion) == null)
             return 0;
+
         return hintTakedIndex.get(answerOfQuestion);
     }
 
