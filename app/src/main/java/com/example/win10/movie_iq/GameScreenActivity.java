@@ -41,7 +41,8 @@ public class GameScreenActivity extends AppCompatActivity {
     private boolean[] isFact = new boolean[3];
     private static final int FACTS_SIZE = 3;
     private ArrayList<String> solutions;
-
+    private User theUser;
+    private UserTierInfo userTierInfo;
 
     DatabaseReference databaseReference;
 
@@ -54,9 +55,18 @@ public class GameScreenActivity extends AppCompatActivity {
         factsBtn = findViewById(R.id.raiseIQButton);
         answerEditText = findViewById(R.id.answerEditText);
 
+        databaseReference = FirebaseDatabase.getInstance().getReference("users");
+
+
         String chosenBt = getIntent().getExtras().getString("chosenBt");
         theQuestion = (Question) getIntent().getSerializableExtra(chosenBt);
         solutions = theQuestion.getSolutions();
+
+        tierText = findViewById(R.id.tierTextView);
+
+
+
+
 
         questionText = findViewById(R.id.questionTextView);
         hintText1 = findViewById(R.id.hintTextView1);
@@ -65,15 +75,22 @@ public class GameScreenActivity extends AppCompatActivity {
         factsText1 = findViewById(R.id.factTextView1);
         factsText2 = findViewById(R.id.factTextView2);
         factsText3 = findViewById(R.id.factTextView3);
-        tierText = findViewById(R.id.tierTextView);
         pointsText = findViewById(R.id.pointTextView);
 
         questionText.setText(theQuestion.getQuestion());
         tierText.setText("Tier " + Integer.toString(theQuestion.getTier()));
         pointsText.setText("Points " + Integer.toString(theQuestion.getCurrentPoints()));
 
-        User theUser = (User) getIntent().getSerializableExtra("user");
+        theUser = (User) getIntent().getSerializableExtra("user");
+
+
         Toast.makeText(this, "GAMESCREEN"+ theUser, Toast.LENGTH_LONG).show();
+
+        userTierInfo = theUser.getUserTierInfoByTierName(tierText.getText().toString().toLowerCase().replace(" ",""));
+
+        Question questionThatOpenedBefore = userTierInfo.getQuestionByAnswer(theQuestion.getAnswer());
+        if(questionThatOpenedBefore != null)
+            theQuestion = questionThatOpenedBefore;
 
         hintBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,11 +100,18 @@ public class GameScreenActivity extends AppCompatActivity {
                 //DatabaseReference condRef = databaseReference.child("tier"+Integer.toString(theQuestion.getTier())).child("0").child("currentPoints");
 
                 // condRef.setValue(5);
-
-                for (int i = 0; i < isHint.length; i++) {
+                int j = userTierInfo.getNumOfHintsTaked(theQuestion.getAnswer());
+                for (int i = j; i < isHint.length; i++) {
                     String hint = theQuestion.getHints().get(i);
                     if (isHint[i] == false) {
-                        theQuestion.setCurrentPoints(theQuestion.getCurrentPoints() - 2);
+                        theQuestion.reducePoints();
+                        userTierInfo.getCurrentPointsForQuestion().put(theQuestion.getAnswer(),theQuestion);
+                        userTierInfo.addHintTakedIndexed(theQuestion.getAnswer());
+
+                        String transMail = theUser.getUserEmail().replace(".","_");
+                        databaseReference.child(transMail).setValue(theUser);
+
+                        theQuestion.setCurrentPoints(theQuestion.getCurrentPoints());
                         pointsText.setText("Points " + Integer.toString(theQuestion.getCurrentPoints()));
                         if (i == 0)
                             hintText1.setText(hint);
@@ -110,6 +134,8 @@ public class GameScreenActivity extends AppCompatActivity {
                 for (int i = 0; i < solutions.size(); i++) {
                     if (answer.equalsIgnoreCase(solutions.get(i))) {
                         Toast.makeText(getApplicationContext(), "Well Done!!", Toast.LENGTH_SHORT).show();
+                        theUser.setTotalPoints(theQuestion.getCurrentPoints());
+                        userTierInfo.addAnsweredQuestion(theQuestion);
                         break;
                     }
                 }
@@ -173,4 +199,5 @@ public class GameScreenActivity extends AppCompatActivity {
 //        else
 //            Toast.makeText(this, "Wrong Answer", Toast.LENGTH_SHORT).show();
     }
+
 }

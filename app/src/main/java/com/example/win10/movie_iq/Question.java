@@ -9,7 +9,7 @@ public class Question implements Serializable {
     private static final int POINTS = 10;
     private int currentPoints = POINTS;
 
-    private int tier = 1;
+    private int tier ;
     private ArrayList<String> hints = new ArrayList<>();
     private ArrayList<String> facts = new ArrayList<>();
     private ArrayList<String> solutions = new ArrayList<>();
@@ -17,12 +17,6 @@ public class Question implements Serializable {
 
     public Question(){}
 
-//    public Question (String question, String answer){
-//        this.question = "In this animated coming of age classic, a lion cub will face family tragedy," +
-//                " exile and the burden of leading his pride as king.";
-//        this.answer = "The Lion King";
-//
-//    }
 
     public String getQuestion() {
         return question;
@@ -89,6 +83,11 @@ public class Question implements Serializable {
 
     public void setFacts(ArrayList<String> facts){
         this.facts = facts;
+    }
+
+
+    public void reducePoints(){
+        currentPoints -= 2;
     }
 
     @Override

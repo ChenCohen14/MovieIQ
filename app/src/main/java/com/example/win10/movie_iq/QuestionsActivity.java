@@ -20,6 +20,7 @@ import java.util.ArrayList;
 public class QuestionsActivity extends AppCompatActivity {
     private GridLayout questionsActivityGrid;
     private ArrayList<Question> questions;
+    private User theUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,8 +28,11 @@ public class QuestionsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_questions);
 
         Intent intent = getIntent();
-        User theUser = (User) intent.getSerializableExtra("user");
-        Toast.makeText(this, "QUESTIONACTIVITY!! "+theUser, Toast.LENGTH_LONG).show();
+        theUser = (User) intent.getSerializableExtra("user");
+
+        Toast.makeText(this, ""+theUser, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, ""+theUser, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, ""+theUser, Toast.LENGTH_LONG).show();
 
         questions = (ArrayList<Question>) intent.getSerializableExtra("questions");
         questionsActivityGrid = findViewById(R.id.questionsActivityGrid);
@@ -41,7 +45,6 @@ public class QuestionsActivity extends AppCompatActivity {
         questionIntent.putExtra("user", theUser);
 
         for (int i = 0; i < questions.size(); i++) {
-            Toast.makeText(this, "Question parsed is : " + questions.get(i), Toast.LENGTH_SHORT).show();
             final Button bt = new Button(this);
 
             bt.setText("Question " + i);
@@ -59,5 +62,13 @@ public class QuestionsActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Toast.makeText(this, ""+theUser, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, ""+theUser, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, ""+theUser, Toast.LENGTH_LONG).show();
     }
 }

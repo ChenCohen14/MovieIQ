@@ -31,6 +31,7 @@ public class TiersActivity extends AppCompatActivity {
     private int progress;
     private Intent intent;
     private User theUser;
+    private UserTierInfo userTierInfo;
 
 
     @Override
@@ -44,15 +45,12 @@ public class TiersActivity extends AppCompatActivity {
         progress = 0;
 
         theUser = (User) getIntent().getSerializableExtra("user");
-        Toast.makeText(this, "TIERSACTIVITY!! "+theUser, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "TIERSACTIVITY!! " + theUser, Toast.LENGTH_LONG).show();
 
 //        intent = new Intent(this, QuestionsActivity.class);
 //
 //        User theUser = (User) getIntent().getSerializableExtra("user");
 //        Toast.makeText(this, theUser+"", Toast.LENGTH_LONG).show();
-
-
-
 
 
     }
@@ -63,7 +61,7 @@ public class TiersActivity extends AppCompatActivity {
         intent.putExtra("user", theUser);
 
         final Button clickedBt = findViewById(view.getId());
-        final String chosenTier = clickedBt.getText().toString().toLowerCase().replaceAll(" ", "");
+        final String chosenTier = clickedBt.getText().toString().toLowerCase().replace(" ", "");
         ;
         questions.clear();
 
@@ -89,7 +87,9 @@ public class TiersActivity extends AppCompatActivity {
                         intent.putExtra("questions", questions);
 
 
-
+                        UserTierInfo userTierInfo = new UserTierInfo(chosenTier);
+                        if (!theUser.isExistUserTierInfo(userTierInfo))
+                            theUser.addUserTierInfo(userTierInfo);
                         startActivity(intent);
 
                     }
@@ -126,7 +126,6 @@ public class TiersActivity extends AppCompatActivity {
         prg.setProgress(0);
         prg.setVisibility(View.INVISIBLE);
     }
-
 
 
 }
