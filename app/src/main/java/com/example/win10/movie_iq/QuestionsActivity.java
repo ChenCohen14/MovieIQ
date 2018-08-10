@@ -21,18 +21,23 @@ public class QuestionsActivity extends AppCompatActivity {
     private GridLayout questionsActivityGrid;
     private ArrayList<Question> questions;
     private User theUser;
+    DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questions);
 
-        Intent intent = getIntent();
+
+        databaseReference = FirebaseDatabase.getInstance().getReference("users");
+
+
+        final Intent intent = getIntent();
         theUser = (User) intent.getSerializableExtra("user");
 
-        Toast.makeText(this, ""+theUser, Toast.LENGTH_LONG).show();
-        Toast.makeText(this, ""+theUser, Toast.LENGTH_LONG).show();
-        Toast.makeText(this, ""+theUser, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "" + theUser, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "" + theUser, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "" + theUser, Toast.LENGTH_LONG).show();
 
         questions = (ArrayList<Question>) intent.getSerializableExtra("questions");
         questionsActivityGrid = findViewById(R.id.questionsActivityGrid);
@@ -56,6 +61,23 @@ public class QuestionsActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     String chosenBt = bt.getText().toString().toLowerCase().replace(" ", "");
                     questionIntent.putExtra("chosenBt", chosenBt);
+
+                    String transMail = theUser.getUserEmail().replace(".", "_");
+                    databaseReference.child(transMail).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            User user = dataSnapshot.getValue(User.class);
+                            if (user.getUserTierInfos() != null)
+                                questionIntent.putExtra("user", user);
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
                     startActivity(questionIntent);
                 }
             });
@@ -67,8 +89,8 @@ public class QuestionsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Toast.makeText(this, ""+theUser, Toast.LENGTH_LONG).show();
-        Toast.makeText(this, ""+theUser, Toast.LENGTH_LONG).show();
-        Toast.makeText(this, ""+theUser, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "" + theUser, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "" + theUser, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "" + theUser, Toast.LENGTH_LONG).show();
     }
 }

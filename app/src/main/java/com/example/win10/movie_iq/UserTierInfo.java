@@ -12,6 +12,8 @@ public class UserTierInfo implements Serializable {
     private Map<String, Question> currentPointsForQuestion;
     private boolean isOpen;
 
+    public UserTierInfo(){}
+
     public UserTierInfo(String tier) {
         this.tier = tier;
         answeredQuestions = new ArrayList<>();

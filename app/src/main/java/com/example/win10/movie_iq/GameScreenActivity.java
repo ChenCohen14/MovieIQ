@@ -65,9 +65,6 @@ public class GameScreenActivity extends AppCompatActivity {
         tierText = findViewById(R.id.tierTextView);
 
 
-
-
-
         questionText = findViewById(R.id.questionTextView);
         hintText1 = findViewById(R.id.hintTextView1);
         hintText2 = findViewById(R.id.hintTextView2);
@@ -84,12 +81,12 @@ public class GameScreenActivity extends AppCompatActivity {
         theUser = (User) getIntent().getSerializableExtra("user");
 
 
-        Toast.makeText(this, "GAMESCREEN"+ theUser, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "GAMESCREEN" + theUser, Toast.LENGTH_LONG).show();
 
-        userTierInfo = theUser.getUserTierInfoByTierName(tierText.getText().toString().toLowerCase().replace(" ",""));
+        userTierInfo = theUser.getUserTierInfoByTierName(tierText.getText().toString().toLowerCase().replace(" ", ""));
 
         Question questionThatOpenedBefore = userTierInfo.getQuestionByAnswer(theQuestion.getAnswer());
-        if(questionThatOpenedBefore != null)
+        if (questionThatOpenedBefore != null)
             theQuestion = questionThatOpenedBefore;
 
         hintBtn.setOnClickListener(new View.OnClickListener() {
@@ -101,14 +98,16 @@ public class GameScreenActivity extends AppCompatActivity {
 
                 // condRef.setValue(5);
                 int j = userTierInfo.getNumOfHintsTaked(theQuestion.getAnswer());
+                for (int k = 0; k < j; k++)
+                    isHint[k] = true;
                 for (int i = j; i < isHint.length; i++) {
                     String hint = theQuestion.getHints().get(i);
                     if (isHint[i] == false) {
                         theQuestion.reducePoints();
-                        userTierInfo.getCurrentPointsForQuestion().put(theQuestion.getAnswer(),theQuestion);
+                        userTierInfo.getCurrentPointsForQuestion().put(theQuestion.getAnswer(), theQuestion);
                         userTierInfo.addHintTakedIndexed(theQuestion.getAnswer());
 
-                        String transMail = theUser.getUserEmail().replace(".","_");
+                        String transMail = theUser.getUserEmail().replace(".", "_");
                         databaseReference.child(transMail).setValue(theUser);
 
                         theQuestion.setCurrentPoints(theQuestion.getCurrentPoints());
