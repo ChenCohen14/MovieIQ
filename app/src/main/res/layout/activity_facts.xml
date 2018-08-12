@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/activity_main"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp"
+    android:background="@android:color/holo_purple"
+    tools:context=".FactsActivity">
+
+    <TextView
+        android:id="@+id/factText1"
+        android:layout_width="302dp"
+        android:layout_height="106dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="191dp"
+        android:gravity="center_horizontal"
+        android:text="fact1"
+        android:textColor="@android:color/black"
+        android:textSize="18dp" />
+
+    <TextView
+        android:id="@+id/factText2"
+        android:layout_width="302dp"
+        android:layout_height="106dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="41dp"
+        android:gravity="center_horizontal"
+        android:text="fact2"
+        android:textColor="@android:color/black"
+        android:textSize="18dp" />
+
+    <TextView
+        android:id="@+id/factText3"
+        android:layout_width="302dp"
+        android:layout_height="106dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="100dp"
+        android:gravity="center_horizontal"
+        android:text="fact3"
+        android:textColor="@android:color/black"
+        android:textSize="18dp" />
+
+
+</RelativeLayout>

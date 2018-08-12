@@ -14,6 +14,8 @@ public class Question implements Serializable {
     private ArrayList<String> facts = new ArrayList<>();
     private ArrayList<String> solutions = new ArrayList<>();
 
+    private boolean isSolved = false;
+
 
     public Question(){}
 
@@ -89,6 +91,15 @@ public class Question implements Serializable {
     public void reducePoints(){
         currentPoints -= 2;
     }
+
+    public boolean isSolved() {
+        return isSolved;
+    }
+
+    public void setSolved(boolean solved) {
+        isSolved = solved;
+    }
+
 
     @Override
     public String toString() {

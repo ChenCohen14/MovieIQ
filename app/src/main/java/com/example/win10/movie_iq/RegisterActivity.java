@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,9 +26,10 @@ public class RegisterActivity extends AppCompatActivity {
 
     private EditText inputEmail, inputPassword, inputUsername;
     private ProgressBar progressBar;
-
     private FirebaseAuth mAuth;
     private DatabaseReference databaseReference;
+    private Intent intent;
+    private User theUser;
 
 
     @Override
@@ -37,15 +39,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         //Get Firebase instances
         mAuth = FirebaseAuth.getInstance();
-
         databaseReference = FirebaseDatabase.getInstance().getReference("users");
-
-
-        // if already logged in go sign in screen
-        if (mAuth.getCurrentUser() != null) {
-            startActivity(new Intent(this, TiersActivity.class));
-            finish();
-        }
+        intent = new Intent(this, TiersActivity.class);
 
         inputEmail = (EditText) findViewById(R.id.email);
         inputPassword = (EditText) findViewById(R.id.password);
@@ -107,7 +102,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                             String userID = databaseReference.push().getKey();
                             User theUser = new User(emailInput, username, userID);
-                            String transMail = theUser.getUserEmail().replace(".","_");
+                            String transMail = theUser.getUserEmail().replace(".", "_");
                             databaseReference.child(transMail).setValue(theUser);
                             intent.putExtra("user", theUser);
 

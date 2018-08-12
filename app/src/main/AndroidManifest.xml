@@ -22,6 +22,7 @@
         <activity android:name=".TiersActivity" />
         <activity android:name=".QuestionsActivity"></activity>
         <activity android:name=".LoginActivity" />
+        <activity android:name=".FactsActivity" />
     </application>
 
 </manifest>

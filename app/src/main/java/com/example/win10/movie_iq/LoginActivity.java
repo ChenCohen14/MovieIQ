@@ -1,4 +1,5 @@
 package com.example.win10.movie_iq;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -33,19 +34,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-        databaseReference = FirebaseDatabase.getInstance().getReference("users");
-
-
-        //Get Firebase auth instance
-        mAuth = FirebaseAuth.getInstance();
-
-        // if user logged in, go to sign-in screen
-        if (mAuth.getCurrentUser() != null) {
-            startActivity(new Intent(LoginActivity.this, TiersActivity.class));
-            finish();
-        }
-
         // set the view now
         setContentView(R.layout.activity_login);
 
@@ -53,8 +41,19 @@ public class LoginActivity extends AppCompatActivity {
         inputPassword = (EditText) findViewById(R.id.password);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
+        //Get Firebase auth instance
+        mAuth = FirebaseAuth.getInstance();
 
+        databaseReference = FirebaseDatabase.getInstance().getReference("users");
         intent = new Intent(LoginActivity.this, TiersActivity.class);
+//
+//        // if user logged in, go to sign-in screen
+//        if (mAuth.getCurrentUser() != null) {
+//            startActivity(new Intent(LoginActivity.this, TiersActivity.class));
+//            finish();
+//        }
+//
+//
 
     }
 
@@ -82,44 +81,44 @@ public class LoginActivity extends AppCompatActivity {
 
         //authenticate user
         mAuth.signInWithEmailAndPassword(email, password)
-        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                // If sign in fails, display a message to the user. If sign in succeeds
-                // the auth state listener will be notified and logic to handle the
-                // signed in user can be handled in the listener.
-                progressBar.setVisibility(View.GONE);
-                if (!task.isSuccessful()) {
-                    // there was an error
-                    if (password.length() < 6) {
-                        inputPassword.setError(getString(R.string.minimum_password));
-                    } else {
-                        Toast.makeText(LoginActivity.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
-                    }
-                } else {
+                .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        // If sign in fails, display a message to the user. If sign in succeeds
+                        // the auth state listener will be notified and logic to handle the
+                        // signed in user can be handled in the listener.
+                        progressBar.setVisibility(View.GONE);
+                        if (!task.isSuccessful()) {
+                            // there was an error
+                            if (password.length() < 6) {
+                                inputPassword.setError(getString(R.string.minimum_password));
+                            } else {
+                                Toast.makeText(LoginActivity.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
+                            }
+                        } else {
 
-                    String transMail = email.replace(".","_");
-                    databaseReference.child(transMail).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            User theUser = dataSnapshot.getValue(User.class);
+                            String transMail = email.replace(".", "_");
+                            databaseReference.child(transMail).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    User theUser = dataSnapshot.getValue(User.class);
 
-                            intent.putExtra("user", theUser);
-                            startActivity(intent);
-                            finish();
-                        }
+                                    intent.putExtra("user", theUser);
+                                    startActivity(intent);
+                                    finish();
+                                }
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
 
-                        }
-                    });
+                                }
+                            });
 
-                    //Intent intent = new Intent(LoginActivity.this, TiersActivity.class);
+                            //Intent intent = new Intent(LoginActivity.this, TiersActivity.class);
 //                    startActivity(intent);
 //                    finish();
-                }
-            }
-        });
+                        }
+                    }
+                });
     }
 }

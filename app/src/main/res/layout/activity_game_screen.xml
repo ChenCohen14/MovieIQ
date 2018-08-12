@@ -9,7 +9,8 @@
     android:paddingRight="16dp"
     android:paddingTop="16dp"
     android:paddingBottom="16dp"
-    tools:context=".MainActivity">
+    android:background="@android:color/holo_orange_dark"
+    tools:context=".GameScreenActivity">
 
     <TextView
         android:id="@+id/tierTextView"
@@ -17,9 +18,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="35dp"
         android:gravity="center_horizontal"
-        android:text="Tier" />
+        android:text="Tier"
+        android:textColor="@android:color/black" />
 
     <TextView
         android:id="@+id/pointTextView"
@@ -28,31 +29,34 @@
         android:layout_alignParentEnd="true"
         android:layout_alignTop="@+id/tierTextView"
         android:layout_marginEnd="53dp"
-        android:text="@string/points" />
+        android:text="@string/points"
+        android:textColor="@android:color/black" />
 
     <TextView
         android:id="@+id/questionTextView"
         android:layout_width="302dp"
-        android:layout_height="81dp"
+        android:layout_height="170dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="103dp"
-        android:text="description" />
+        android:layout_marginTop="43dp"
+        android:gravity="center_horizontal"
+        android:text="description"
+        android:textColor="#000000"
+        android:textSize="17dp" />
 
     <Button
         android:id="@+id/hintButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/answerEditText"
-        android:layout_toEndOf="@+id/tierTextView"
+        android:layout_above="@+id/raiseIQButton"
+        android:layout_alignStart="@+id/pointTextView"
         android:text="Hint" />
 
     <Button
         android:id="@+id/raiseIQButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="48dp"
+        android:layout_alignBottom="@+id/submitButton"
         android:layout_toEndOf="@+id/tierTextView"
         android:clickable="false"
         android:text="Raise My Movie-IQ!" />
@@ -61,69 +65,46 @@
         android:id="@+id/answerEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/raiseIQButton"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="146dp"
         android:hint="Your Answer" />
 
     <Button
         android:id="@+id/submitButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/raiseIQButton"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="31dp"
         android:layout_toStartOf="@+id/tierTextView"
-        android:text="@string/submit"
-        android:onClick="onClick"/>
+        android:onClick="onClick"
+        android:text="@string/submit" />
 
     <TextView
         android:id="@+id/hintTextView1"
-        android:layout_width="79dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="213dp"
-        android:text="Hints" />
+        android:layout_width="98dp"
+        android:layout_height="151dp"
+        android:layout_alignEnd="@+id/tierTextView"
+        android:layout_below="@+id/questionTextView"
+        android:text="Hints"
+        android:textColor="#000000" />
 
     <TextView
         android:id="@+id/hintTextView3"
-        android:layout_width="79dp"
-        android:layout_height="wrap_content"
+        android:layout_width="89dp"
+        android:layout_height="151dp"
+        android:layout_alignStart="@+id/pointTextView"
         android:layout_alignTop="@+id/hintTextView1"
-        android:layout_toEndOf="@+id/tierTextView"
-        android:text="Hints" />
-
-    <TextView
-        android:id="@+id/factTextView3"
-        android:layout_width="72dp"
-        android:layout_height="20dp"
-        android:layout_alignTop="@+id/factTextView1"
-        android:layout_toEndOf="@+id/tierTextView"
-        android:text="Facts" />
-
-    <TextView
-        android:id="@+id/factTextView2"
-        android:layout_width="72dp"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/factTextView1"
-        android:layout_toStartOf="@+id/answerEditText"
-        android:text="Facts" />
-
-    <TextView
-        android:id="@+id/factTextView1"
-        android:layout_width="72dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="250dp"
-        android:text="Facts" />
+        android:text="Hints"
+        android:textColor="@android:color/black" />
 
     <TextView
         android:id="@+id/hintTextView2"
-        android:layout_width="79dp"
-        android:layout_height="wrap_content"
+        android:layout_width="92dp"
+        android:layout_height="151dp"
+        android:layout_alignStart="@+id/questionTextView"
         android:layout_alignTop="@+id/hintTextView1"
-        android:layout_toStartOf="@+id/answerEditText"
-        android:text="Hints" />
+        android:text="Hints"
+        android:textColor="#000000" />
 
 
 </RelativeLayout>

@@ -1,5 +1,7 @@
 package com.example.win10.movie_iq;
 
+import android.util.Log;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,8 +10,8 @@ import java.util.Map;
 public class UserTierInfo implements Serializable {
     private String tier;
     private ArrayList<Question> answeredQuestions;
-    private Map<String, Integer> hintTakedIndex;
-    private Map<String, Question> currentPointsForQuestion;
+    private Map<String, Integer> hintTakenIndex;
+    private Map<String, Integer> currentPointsForQuestion;
     private boolean isOpen;
 
     public UserTierInfo(){}
@@ -17,10 +19,12 @@ public class UserTierInfo implements Serializable {
     public UserTierInfo(String tier) {
         this.tier = tier;
         answeredQuestions = new ArrayList<>();
-        hintTakedIndex = new HashMap<>();
+        hintTakenIndex = new HashMap<>();
         isOpen = true;
-
         currentPointsForQuestion = new HashMap<>();
+        answeredQuestions.add(new Question());
+        currentPointsForQuestion.put("default", 0);
+        hintTakenIndex.put("default", 0);
     }
 
     public String getTier() {
@@ -32,7 +36,7 @@ public class UserTierInfo implements Serializable {
     }
 
     public Map<String, Integer> getHintTakedIndex() {
-        return hintTakedIndex;
+        return hintTakenIndex;
     }
 
     public boolean isOpen() {
@@ -48,7 +52,7 @@ public class UserTierInfo implements Serializable {
     }
 
     public void setHintTakedIndex(Map<String, Integer> hintTakedIndex) {
-        this.hintTakedIndex = hintTakedIndex;
+        this.hintTakenIndex = hintTakedIndex;
     }
 
     public void setOpen(boolean open) {
@@ -61,37 +65,38 @@ public class UserTierInfo implements Serializable {
 
     public void addHintTakedIndexed(String answerOfQuestion) {
         int count = getNumOfHintsTaked(answerOfQuestion);
-        hintTakedIndex.put(answerOfQuestion, count + 1);
+        hintTakenIndex.put(answerOfQuestion, count + 1);
     }
 
     public int getNumOfHintsTaked(String answerOfQuestion){
-        if(hintTakedIndex.size() == 0 || hintTakedIndex.get(answerOfQuestion) == null)
+        if(hintTakenIndex == null)
             return 0;
-
-        return hintTakedIndex.get(answerOfQuestion);
+        else if(hintTakenIndex.get(answerOfQuestion) != null)
+            return hintTakenIndex.get(answerOfQuestion);
+        return 0;
     }
 
-    public Map<String, Question> getCurrentPointsForQuestion() {
+    public Map<String, Integer> getCurrentPointsForQuestion() {
         return currentPointsForQuestion;
     }
 
-    public void setCurrentPointsForQuestion(Map<String, Question> currentPointsForQuestion) {
+    public void setCurrentPointsForQuestion(Map<String, Integer> currentPointsForQuestion) {
         this.currentPointsForQuestion = currentPointsForQuestion;
     }
 //    public void saveCurrentPointsPerQuestion(String questionAnswer, int currentPoints){
 //        currentPointsForQuestion.put(questionAnswer, currentPoints);
 //    }
 
-    public Question getQuestionByAnswer(String questionAnswer){
-        return currentPointsForQuestion.get(questionAnswer);
-    }
+    //public Question getQuestionByAnswer(String questionAnswer){
+     //   return currentPointsForQuestion.get(questionAnswer);
+    //}
 
     @Override
     public String toString() {
         return "UserTierInfo{" +
                 "tier='" + tier + '\'' +
                 ", answeredQuestions=" + answeredQuestions +
-                ", hintTakedIndex=" + hintTakedIndex +
+                ", hintTakedIndex=" + hintTakenIndex +
                 ", currentPointsForQuestion=" + currentPointsForQuestion +
                 ", isOpen=" + isOpen +
                 '}';

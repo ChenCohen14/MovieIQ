@@ -12,7 +12,8 @@
     tools:context=".TiersActivity">
 
     <Button
-        android:id="@+id/tier1Bt"
+        android:id="@+id/tier1"
+        android:background="@android:color/holo_blue_dark"
         android:layout_width="207dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -24,40 +25,40 @@
     />
 
     <Button
-        android:id="@+id/tier2Bt"
+        android:id="@+id/tier2"
         android:layout_width="207dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tier1Bt"
+        android:layout_below="@+id/tier1"
         android:layout_centerHorizontal="true"
         android:text="@string/tier_2"
         android:onClick="onClick"/>
 
     <Button
-        android:id="@+id/tier3Bt"
+        android:id="@+id/tier3"
         android:layout_width="207dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tier2Bt"
+        android:layout_below="@+id/tier2"
         android:layout_centerHorizontal="true"
         android:text="@string/tier_3"
         android:onClick="onClick"/>
 
     <Button
-        android:id="@+id/tier4Bt"
+        android:id="@+id/tier4"
         android:layout_width="207dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tier3Bt"
+        android:layout_below="@+id/tier3"
         android:layout_centerHorizontal="true"
         android:text="@string/tier_4"
         android:onClick="onClick"/>
 
     <Button
-        android:id="@+id/tier5Bt"
+        android:id="@+id/tier5"
         android:layout_width="207dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tier4Bt"
+        android:layout_below="@+id/tier4"
         android:layout_centerHorizontal="true"
-        android:text="@string/tier_5"
-        android:onClick="onClick"/>
+        android:onClick="onClick"
+        android:text="@string/tier_5" />
 
     <Button
         android:id="@+id/logout"
@@ -80,6 +81,17 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="177dp" />
+
+    <TextView
+        android:id="@+id/userTextView"
+        android:layout_width="261dp"
+        android:layout_height="40dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="216dp"
+        android:textColor="@android:color/black"
+        android:gravity="center_horizontal"
+        android:textStyle="bold" />
 
 
 </RelativeLayout>
