@@ -1,6 +1,7 @@
 package com.example.win10.movie_iq;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.support.v4.content.ContextCompat;
@@ -50,10 +51,14 @@ public class TiersActivity extends AppCompatActivity {
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tiers);
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+
         questions = new ArrayList<>();
         databaseReference = FirebaseDatabase.getInstance().getReference("questions");
         userReference = FirebaseDatabase.getInstance().getReference("users");
@@ -150,7 +155,11 @@ public class TiersActivity extends AppCompatActivity {
 
                         Log.d("INSIDETIERS", "USER IS"+theUser);
                         intent.putExtra("user", theUser);
+                        intent.putExtra("chosenTier",chosenTier);
                         startActivity(intent);
+
+
+
 
                     }
                 }

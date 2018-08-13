@@ -2,6 +2,7 @@ package com.example.win10.movie_iq;
 
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -38,6 +39,8 @@ public class GameScreenActivity extends AppCompatActivity {
     private User theUser;
     private UserTierInfo userTierInfo;
 
+    private TextView tierText;
+
     DatabaseReference databaseReference;
     private int numOfHintsTaken;
 
@@ -51,6 +54,9 @@ public class GameScreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_screen);
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+
         hintBtn = findViewById(R.id.hintButton);
         submitBtn = findViewById(R.id.submitButton);
         factsBtn = findViewById(R.id.raiseIQButton);
@@ -66,7 +72,7 @@ public class GameScreenActivity extends AppCompatActivity {
 
         solutions = theQuestion.getSolutions();
 
-        TextView tierText = findViewById(R.id.tierTextView);
+        tierText = findViewById(R.id.tierTextView);
 
 
         questionText = findViewById(R.id.questionTextView);
@@ -163,7 +169,8 @@ public class GameScreenActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(this, QuestionsActivity.class);
-
+        String chosenTier = tierText.getText().toString().toLowerCase().replace(" ","");
+        intent.putExtra("chosenTier", chosenTier);
         intent.putExtra("user", theUser);
         intent.putExtra("questions", questions);
         startActivity(intent);

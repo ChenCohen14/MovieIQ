@@ -1,6 +1,7 @@
 package com.example.win10.movie_iq;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 
 public class QuestionsActivity extends AppCompatActivity {
     private GridLayout questionsActivityGrid;
-    private  ArrayList<Question> questions;
+    private ArrayList<Question> questions;
     private User theUser;
     DatabaseReference databaseReference;
 
@@ -29,12 +30,14 @@ public class QuestionsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questions);
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 
         databaseReference = FirebaseDatabase.getInstance().getReference("users");
 
 
         final Intent intent = getIntent();
+        String chosenTier = getIntent().getExtras().getString("chosenTier");
         theUser = (User) intent.getSerializableExtra("user");
 
         questions = (ArrayList<Question>) intent.getSerializableExtra("questions");
@@ -50,13 +53,15 @@ public class QuestionsActivity extends AppCompatActivity {
         for (int i = 0; i < questions.size(); i++) {
             final Button bt = new Button(this);
 
-            bt.setText("Question " + (i+1));
+            bt.setText("Question " + (i + 1));
 
 
-            bt.setBackgroundColor(Color.BLUE);
+            UserTierInfo userTierInfo = theUser.getUserTierInfoByTierName(chosenTier);
+            if(userTierInfo.checkIfTheQuestionIsAnsweredByAnswer(questions.get(i).getAnswer()))
+                bt.setTextColor(Color.BLUE);
 
 
-            questionIntent.putExtra("question" + (i+1), questions.get(i));
+            questionIntent.putExtra("question" + (i + 1), questions.get(i));
             questionsActivityGrid.addView(bt);
             bt.setOnClickListener(new View.OnClickListener() {
                 @Override

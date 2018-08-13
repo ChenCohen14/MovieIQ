@@ -84,6 +84,14 @@ public class UserTierInfo implements Serializable {
         this.currentPointsForQuestion = currentPointsForQuestion;
     }
 
+    public boolean checkIfTheQuestionIsAnsweredByAnswer(String answer){
+        for (int i =0 ; i<answeredQuestions.size(); i++){
+            if(answer.equalsIgnoreCase(answeredQuestions.get(i).getAnswer()))
+                return true;
+        }
+        return false;
+    }
+
 
     @Override
     public String toString() {
