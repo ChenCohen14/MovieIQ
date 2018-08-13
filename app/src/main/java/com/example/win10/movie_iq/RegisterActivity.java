@@ -1,6 +1,7 @@
 package com.example.win10.movie_iq;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.io.IOException;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -46,6 +49,24 @@ public class RegisterActivity extends AppCompatActivity {
         inputPassword = (EditText) findViewById(R.id.password);
         inputUsername = (EditText) findViewById(R.id.username);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
+
+
+
+        // play songs
+        MediaPlayer mp = new MediaPlayer();
+        try{
+            mp.setDataSource("https://firebasestorage.googleapis.com/v0/b/movieiq2.appspot.com/o/Tarzan%20-Son%20Of%20Man%20(Phil%20Collins).mp3?alt=media&token=8281c86f-177f-42f8-a28d-b261dce48928");
+            mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    mp.start();
+
+                }
+            });
+            mp.prepare();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.example.win10.movie_iq;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -84,6 +86,7 @@ public class TiersActivity extends AppCompatActivity {
         theUser = (User)getIntent().getSerializableExtra("user");
         userTextView = findViewById(R.id.userTextView);
         userTextView.setText("Welcome " +theUser.getName() + "! Highscore is: " + theUser.getTotalPoints());
+
 
 
 
