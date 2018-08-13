@@ -46,14 +46,7 @@ public class LoginActivity extends AppCompatActivity {
 
         databaseReference = FirebaseDatabase.getInstance().getReference("users");
         intent = new Intent(LoginActivity.this, TiersActivity.class);
-//
-//        // if user logged in, go to sign-in screen
-//        if (mAuth.getCurrentUser() != null) {
-//            startActivity(new Intent(LoginActivity.this, TiersActivity.class));
-//            finish();
-//        }
-//
-//
+
 
     }
 
@@ -114,9 +107,7 @@ public class LoginActivity extends AppCompatActivity {
                                 }
                             });
 
-                            //Intent intent = new Intent(LoginActivity.this, TiersActivity.class);
-//                    startActivity(intent);
-//                    finish();
+
                         }
                     }
                 });

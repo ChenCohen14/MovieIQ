@@ -45,6 +45,8 @@ public class GameScreenActivity extends AppCompatActivity {
 
     private Integer currentPoints;
 
+    private static final int REDUCED_POINTS = 2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,7 +103,7 @@ public class GameScreenActivity extends AppCompatActivity {
                 for (int i = numOfHintsTaken; i < isHint.length; i++) {
                     String hint = theQuestion.getHints().get(i);
                     if (isHint[i] == false) {
-                        currentPoints -= 2;
+                        currentPoints -= REDUCED_POINTS;
                         userTierInfo.getCurrentPointsForQuestion().put(theQuestion.getAnswer(), currentPoints);
 
 

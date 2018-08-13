@@ -10,7 +10,6 @@ public class User implements Serializable {
     private String name;
     private String userID;
     private int totalPoints;
-    //private int pointsPerQuestion;
     private ArrayList<UserTierInfo> userTierInfos;
     private int currentOpenTiers;
 
@@ -24,7 +23,6 @@ public class User implements Serializable {
         this.userID = userID;
         totalPoints = 0;
         currentOpenTiers = 1;
-        //  pointsPerQuestion = 10;
         userTierInfos = new ArrayList<>();
 
 
@@ -58,18 +56,14 @@ public class User implements Serializable {
         this.totalPoints += totalPoints;
     }
 
-//    public void setPointsPerQuestion(int pointsPerQuestion) {
-//        this.pointsPerQuestion = pointsPerQuestion;
-//    }
+
 
 
     public int getTotalPoints() {
         return totalPoints;
     }
 
-    // public int getPointsPerQuestion() {
-    //return pointsPerQuestion;
-    // }
+
 
     public ArrayList<UserTierInfo> getUserTierInfos() {
         return userTierInfos;
