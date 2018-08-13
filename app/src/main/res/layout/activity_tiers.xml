@@ -13,7 +13,6 @@
 
     <Button
         android:id="@+id/tier1"
-        android:background="@android:color/holo_blue_dark"
         android:layout_width="207dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"

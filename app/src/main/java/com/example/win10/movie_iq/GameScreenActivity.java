@@ -27,17 +27,13 @@ public class GameScreenActivity extends AppCompatActivity {
     private TextView hintText1;
     private TextView hintText2;
     private TextView hintText3;
-    private TextView tierText;
     private TextView pointsText;
     private EditText answerEditText;
     private Question theQuestion;
     private Button hintBtn;
     private Button submitBtn;
     private Button factsBtn;
-    private String answer;
     private boolean[] isHint = new boolean[3];
-    private boolean[] isFact = new boolean[3];
-    private static final int FACTS_SIZE = 3;
     private ArrayList<String> solutions;
     private User theUser;
     private UserTierInfo userTierInfo;
@@ -46,6 +42,8 @@ public class GameScreenActivity extends AppCompatActivity {
     private int numOfHintsTaken;
 
     private ArrayList<Question> questions;
+
+    private Integer currentPoints;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +64,7 @@ public class GameScreenActivity extends AppCompatActivity {
 
         solutions = theQuestion.getSolutions();
 
-        tierText = findViewById(R.id.tierTextView);
+        TextView tierText = findViewById(R.id.tierTextView);
 
 
         questionText = findViewById(R.id.questionTextView);
@@ -77,7 +75,7 @@ public class GameScreenActivity extends AppCompatActivity {
 
         questionText.setText(theQuestion.getQuestion());
         tierText.setText("Tier " + Integer.toString(theQuestion.getTier()));
-        pointsText.setText("Points " + Integer.toString(theQuestion.getCurrentPoints()));
+
 
         theUser = (User) getIntent().getSerializableExtra("user");
         final String email = theUser.getUserEmail().replace(".", "_");
@@ -85,13 +83,10 @@ public class GameScreenActivity extends AppCompatActivity {
 
         userTierInfo = theUser.getUserTierInfoByTierName(tierText.getText().toString().toLowerCase().replace(" ", ""));
 
-
-
-
-        //Question questionThatOpenedBefore = userTierInfo.getQuestionByAnswer(theQuestion.getAnswer());
-        //if (questionThatOpenedBefore != null)
-        //    theQuestion = questionThatOpenedBefore;
-
+        currentPoints = userTierInfo.getCurrentPointsForQuestion().get(theQuestion.getAnswer());
+        if (currentPoints == null)
+            currentPoints = theQuestion.getCurrentPoints();
+        pointsText.setText("Points " + currentPoints);
 
 
         numOfHintsTaken = userTierInfo.getNumOfHintsTaked(theQuestion.getAnswer());
@@ -106,21 +101,20 @@ public class GameScreenActivity extends AppCompatActivity {
                 for (int i = numOfHintsTaken; i < isHint.length; i++) {
                     String hint = theQuestion.getHints().get(i);
                     if (isHint[i] == false) {
-                        theQuestion.reducePoints();
-
-                        userTierInfo.getCurrentPointsForQuestion().put(theQuestion.getAnswer(), theQuestion.getCurrentPoints());
+                        currentPoints -= 2;
+                        userTierInfo.getCurrentPointsForQuestion().put(theQuestion.getAnswer(), currentPoints);
 
 
                         userTierInfo.addHintTakedIndexed(theQuestion.getAnswer());
                         databaseReference.child(email).setValue(theUser);
 
 
-                        pointsText.setText("Points " + Integer.toString(theQuestion.getCurrentPoints()));
+                        pointsText.setText("Points " + Integer.toString(currentPoints));
                         if (i == 0)
                             hintText1.setText(hint);
-                        if (i == 1)
+                        else if (i == 1)
                             hintText2.setText(hint);
-                        if (i == 2)
+                        else if (i == 2)
                             hintText3.setText(hint);
                         isHint[i] = true;
                         break;
@@ -133,12 +127,12 @@ public class GameScreenActivity extends AppCompatActivity {
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                answer = answerEditText.getText().toString();
+                String answer = answerEditText.getText().toString();
                 for (int i = 0; i < solutions.size(); i++) {
                     if (answer.equalsIgnoreCase(solutions.get(i))) {
 
                         Toast.makeText(getApplicationContext(), "Well Done!!", Toast.LENGTH_SHORT).show();
-                        theUser.setTotalPoints(theQuestion.getCurrentPoints());
+                        theUser.setTotalPoints(currentPoints);
                         userTierInfo.addAnsweredQuestion(theQuestion);
                         databaseReference.child(email).setValue(theUser);
                         submitBtn.setEnabled(false);
@@ -161,35 +155,6 @@ public class GameScreenActivity extends AppCompatActivity {
         });
 
 
-//    public void onClick (View view){
-//
-//        String id = databaseReference.push().getKey();
-//
-//        Question q = new Question("","");
-//        HashMap <Integer,Question> lst = new HashMap<>();
-//        lst.put(0,q);
-//        databaseReference.child("tier1").child(""+0).setValue(lst.get(0));
-//
-//        Toast.makeText(this,"q added",Toast.LENGTH_LONG).show();
-
-
-//        final EditText answerEditText = findViewById(R.id.answerEditText);
-//        String answer = answerEditText.getText().toString();
-//        if (answer.equals(q.getAnswer())) {
-//            vid.setVisibility(View.VISIBLE);
-//            MediaController m = new MediaController(this);
-//            vid.setMediaController(m);
-//
-//            String path = "android.resource://com.example.win10.movieiq/"+R.raw.thelionking;
-//
-//            Uri u = Uri.parse(path);
-//
-//            vid.setVideoURI(u);
-//
-//            vid.start();
-//        }
-//        else
-//            Toast.makeText(this, "Wrong Answer", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -198,7 +163,7 @@ public class GameScreenActivity extends AppCompatActivity {
         Intent intent = new Intent(this, QuestionsActivity.class);
 
         intent.putExtra("user", theUser);
-        intent.putExtra("questions",questions);
+        intent.putExtra("questions", questions);
         startActivity(intent);
         finish();
     }
@@ -216,7 +181,7 @@ public class GameScreenActivity extends AppCompatActivity {
         int i = 0;
         while (i < isHint.length && isHint[i] == true) {
             String hint = theQuestion.getHints().get(i);
-            pointsText.setText("Points " + Integer.toString(userTierInfo.getCurrentPointsForQuestion().get(theQuestion.getAnswer())));
+            pointsText.setText("Points " + Integer.toString(currentPoints));
             if (i == 0)
                 hintText1.setText(hint);
             else if (i == 1)

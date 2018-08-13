@@ -42,7 +42,6 @@ public class QuestionsActivity extends AppCompatActivity {
 
         questionsActivityGrid.setColumnCount(1);
         questionsActivityGrid.setRowCount(questions.size());
-        //Toast.makeText(this,questions.get(0)+"",Toast.LENGTH_SHORT).show();
         final Intent questionIntent = new Intent(this, GameScreenActivity.class);
         questionIntent.putExtra("user", theUser);
 
@@ -82,7 +81,6 @@ public class QuestionsActivity extends AppCompatActivity {
                         }
                     });
 
-                    //startActivity(questionIntent);
                 }
             });
 

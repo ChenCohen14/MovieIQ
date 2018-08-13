@@ -83,13 +83,7 @@ public class UserTierInfo implements Serializable {
     public void setCurrentPointsForQuestion(Map<String, Integer> currentPointsForQuestion) {
         this.currentPointsForQuestion = currentPointsForQuestion;
     }
-//    public void saveCurrentPointsPerQuestion(String questionAnswer, int currentPoints){
-//        currentPointsForQuestion.put(questionAnswer, currentPoints);
-//    }
 
-    //public Question getQuestionByAnswer(String questionAnswer){
-     //   return currentPointsForQuestion.get(questionAnswer);
-    //}
 
     @Override
     public String toString() {

@@ -109,23 +109,6 @@ public class RegisterActivity extends AppCompatActivity {
                             startActivity(intent);
                             finish();
 
-//
-//                            databaseReference = FirebaseDatabase.getInstance().getReference("userCount");
-//                            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-//                                @Override
-//                                public void onDataChange(DataSnapshot dataSnapshot) {
-//                                    int currentCount = dataSnapshot.getValue(Integer.class);
-//                                    currentCount++;
-//                                    databaseReference.setValue(currentCount);
-//                                }
-//
-//                                @Override
-//                                public void onCancelled(DatabaseError databaseError) {
-//
-//                                }
-//                            });
-
-//
                         }
                     }
                 });

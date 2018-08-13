@@ -34,9 +34,7 @@ public class TiersActivity extends AppCompatActivity {
     private DatabaseReference userReference;
     private ProgressBar prg;
     private int progress;
-    private Intent intent;
     private User theUser;
-    private UserTierInfo userTierInfo;
     private TextView userTextView;
 
     private Button btTier1;
@@ -46,6 +44,7 @@ public class TiersActivity extends AppCompatActivity {
     private Button btTier5;
     private Button [] tiersBtnArr;
     private static final int NUM_OF_TIERS = 5;
+    private static final int NEXT_TIER_LIMIT = 1;
 
 
 
@@ -170,8 +169,7 @@ public class TiersActivity extends AppCompatActivity {
         if (theUser.getUserTierInfos() != null) {
             UserTierInfo uti = theUser.getUserTierInfoByTierName(prevTier);
             if (uti != null) {
-                if (uti.getAnsweredQuestions().size() > 1) {
-                    clickedBt.setBackgroundColor(Color.CYAN);
+                if (uti.getAnsweredQuestions().size() > NEXT_TIER_LIMIT) {
                     return true;
 
                 }
