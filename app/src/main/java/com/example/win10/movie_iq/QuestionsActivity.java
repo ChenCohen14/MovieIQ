@@ -53,6 +53,8 @@ public class QuestionsActivity extends AppCompatActivity {
             bt.setText("Question " + (i+1));
 
 
+            bt.setBackgroundColor(Color.BLUE);
+
 
             questionIntent.putExtra("question" + (i+1), questions.get(i));
             questionsActivityGrid.addView(bt);
