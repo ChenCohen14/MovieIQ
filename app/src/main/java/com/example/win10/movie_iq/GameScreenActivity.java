@@ -50,6 +50,9 @@ public class GameScreenActivity extends AppCompatActivity {
 
     private static final int REDUCED_POINTS = 2;
 
+
+    private Button clipBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +67,9 @@ public class GameScreenActivity extends AppCompatActivity {
         databaseReference = FirebaseDatabase.getInstance().getReference("users");
         factsBtn.setEnabled(false);
 
+
+        clipBtn = findViewById(R.id.clipButton);
+        clipBtn.setEnabled(false);
 
         String chosenBt = getIntent().getExtras().getString("chosenBt");
         theQuestion = (Question) getIntent().getSerializableExtra(chosenBt);
@@ -101,6 +107,15 @@ public class GameScreenActivity extends AppCompatActivity {
         exposeHints(numOfHintsTaken);
         checkAnsweredQuestion(userTierInfo);
 
+
+        clipBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent ClipIntent = new Intent(getApplicationContext(), ClipActivity.class);
+                ClipIntent.putExtra("question", theQuestion);
+                startActivity(ClipIntent);
+            }
+        });
 
         hintBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,6 +161,8 @@ public class GameScreenActivity extends AppCompatActivity {
                         submitBtn.setEnabled(false);
                         hintBtn.setEnabled(false);
                         factsBtn.setEnabled(true);
+                        clipBtn.setEnabled(true);
+
                         break;
                     }
                 }
@@ -210,6 +227,8 @@ public class GameScreenActivity extends AppCompatActivity {
                     hintBtn.setEnabled(false);
                     submitBtn.setEnabled(false);
                     factsBtn.setEnabled(true);
+                    clipBtn.setEnabled(true);
+
                     break;
                 }
             }

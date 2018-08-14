@@ -1,5 +1,7 @@
 package com.example.win10.movie_iq;
 
+import android.net.Uri;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -16,12 +18,22 @@ public class Question implements Serializable {
 
     private boolean isSolved = false;
 
+    private String uri;
+
 
     public Question(){}
 
 
     public String getQuestion() {
         return question;
+    }
+
+    public String getUri() {
+        return uri;
+    }
+
+    public void setUri(String uri) {
+        this.uri = uri;
     }
 
     public String getAnswer() {
