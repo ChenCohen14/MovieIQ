@@ -47,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         databaseReference = FirebaseDatabase.getInstance().getReference("users");
-        intent = new Intent(LoginActivity.this, TiersActivity.class);
+        intent = new Intent(LoginActivity.this, StartGameActivity.class);
 
 
     }
@@ -113,5 +113,11 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 }

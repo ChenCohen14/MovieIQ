@@ -1,5 +1,6 @@
 package com.example.win10.movie_iq;
 
+import android.content.pm.ActivityInfo;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +13,6 @@ import android.widget.VideoView;
 public class ClipActivity extends AppCompatActivity {
 
     private VideoView clipView;
-    //private ProgressBar clipProgressbar;
     private Uri clipUri;
     private Question q;
 
@@ -20,8 +20,9 @@ public class ClipActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clip);
+        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        
+
         clipView = (VideoView) findViewById(R.id.clipView);
         q = (Question) getIntent().getSerializableExtra("question");
         clipUri = Uri.parse(q.getUri());
@@ -40,6 +41,7 @@ public class ClipActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         clipView.stopPlayback();
+        finish();
     }
 
 }

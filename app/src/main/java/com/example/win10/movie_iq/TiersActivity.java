@@ -196,6 +196,7 @@ public class TiersActivity extends AppCompatActivity {
     public void onLogout(View view) {
         FirebaseAuth.getInstance().signOut();
         startActivity(new Intent(this, RegisterActivity.class));
+        finish();
     }
 
 
@@ -210,12 +211,7 @@ public class TiersActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        FirebaseAuth.getInstance().signOut();
-        startActivity(new Intent(this, RegisterActivity.class));
-    }
+
 
 
     private void lockOrEnableAllTiers(Button [] arr,boolean value){
@@ -225,4 +221,12 @@ public class TiersActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, StartGameActivity.class);
+        intent.putExtra("user", theUser);
+        intent.putExtra("TAG", TAG);
+        startActivity(intent);
+        finish();
+    }
 }

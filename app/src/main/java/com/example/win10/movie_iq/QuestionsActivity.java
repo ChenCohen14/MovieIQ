@@ -113,6 +113,7 @@ public class QuestionsActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        finish();
     }
 
 }

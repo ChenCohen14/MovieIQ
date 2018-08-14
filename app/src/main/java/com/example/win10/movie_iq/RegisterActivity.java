@@ -46,7 +46,7 @@ public class RegisterActivity extends AppCompatActivity {
         //Get Firebase instances
         mAuth = FirebaseAuth.getInstance();
         databaseReference = FirebaseDatabase.getInstance().getReference("users");
-        intent = new Intent(this, TiersActivity.class);
+        intent = new Intent(this, StartGameActivity.class);
 
         inputEmail = (EditText) findViewById(R.id.email);
         inputPassword = (EditText) findViewById(R.id.password);
@@ -55,21 +55,7 @@ public class RegisterActivity extends AppCompatActivity {
 
 
 
-        // play songs
-        MediaPlayer mp = new MediaPlayer();
-        try{
-            mp.setDataSource("https://firebasestorage.googleapis.com/v0/b/movieiq2.appspot.com/o/Tarzan%20-Son%20Of%20Man%20(Phil%20Collins).mp3?alt=media&token=8281c86f-177f-42f8-a28d-b261dce48928");
-            mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                @Override
-                public void onPrepared(MediaPlayer mp) {
-                    mp.start();
 
-                }
-            });
-            mp.prepare();
-        }catch (IOException e){
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -121,7 +107,7 @@ public class RegisterActivity extends AppCompatActivity {
                         } else {
 
 
-                            Intent intent = new Intent(RegisterActivity.this, TiersActivity.class);
+                            Intent intent = new Intent(RegisterActivity.this, StartGameActivity.class);
 
 
                             String userID = databaseReference.push().getKey();
