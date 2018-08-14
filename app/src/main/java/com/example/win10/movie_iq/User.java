@@ -9,6 +9,7 @@ public class User implements Serializable {
     private String userEmail;
     private String name;
     private String userID;
+    private String rank;
     private int totalPoints;
     private ArrayList<UserTierInfo> userTierInfos;
     private int currentOpenTiers;
@@ -21,9 +22,11 @@ public class User implements Serializable {
         this.userEmail = userEmail;
         this.name = name;
         this.userID = userID;
+        this.rank = "Film Novice";
         totalPoints = 0;
         currentOpenTiers = 1;
         userTierInfos = new ArrayList<>();
+        userTierInfos.add(new UserTierInfo());
 
 
     }
@@ -57,12 +60,9 @@ public class User implements Serializable {
     }
 
 
-
-
     public int getTotalPoints() {
         return totalPoints;
     }
-
 
 
     public ArrayList<UserTierInfo> getUserTierInfos() {
@@ -74,9 +74,11 @@ public class User implements Serializable {
     }
 
     public boolean isExistUserTierInfo(UserTierInfo userTierInfo) {
-        for (int i = 0; i < userTierInfos.size(); i++) {
-            if (userTierInfo.getTier().equals(userTierInfos.get(i).getTier()))
-                return true;
+        if(userTierInfos != null) {
+            for (int i = 0; i < userTierInfos.size(); i++) {
+                if (userTierInfo.getTier().equals(userTierInfos.get(i).getTier()))
+                    return true;
+            }
         }
         return false;
     }
@@ -86,9 +88,10 @@ public class User implements Serializable {
             return;
         userTierInfos.add(newUserTierInfo);
     }
-    public UserTierInfo getUserTierInfoByTierName(String tierName){
-        for(int i=0 ;i<getUserTierInfos().size();i++){
-            if(getUserTierInfos().get(i).getTier().equals(tierName))
+
+    public UserTierInfo getUserTierInfoByTierName(String tierName) {
+        for (int i = 0; i < getUserTierInfos().size(); i++) {
+            if (getUserTierInfos().get(i).getTier().equals(tierName))
                 return getUserTierInfos().get(i);
         }
         return null;
@@ -101,6 +104,18 @@ public class User implements Serializable {
     public void setCurrentOpenTiers(int currentOpenTiers) {
         this.currentOpenTiers = currentOpenTiers;
     }
+
+
+    public String getRank() {
+        return rank;
+    }
+
+    public void setRank(String rank) {
+        this.rank = rank;
+    }
+
+
+
 
     @Override
     public String toString() {

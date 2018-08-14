@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UserTierInfo implements Serializable {
-    private String tier;
+    private String tier = "tier0";
     private ArrayList<Question> answeredQuestions;
     private Map<String, Integer> hintTakenIndex;
     private Map<String, Integer> currentPointsForQuestion;
@@ -64,11 +64,11 @@ public class UserTierInfo implements Serializable {
     }
 
     public void addHintTakedIndexed(String answerOfQuestion) {
-        int count = getNumOfHintsTaked(answerOfQuestion);
+        int count = getNumOfHintsTaken(answerOfQuestion);
         hintTakenIndex.put(answerOfQuestion, count + 1);
     }
 
-    public int getNumOfHintsTaked(String answerOfQuestion){
+    public int getNumOfHintsTaken(String answerOfQuestion){
         if(hintTakenIndex == null)
             return 0;
         else if(hintTakenIndex.get(answerOfQuestion) != null)

@@ -27,24 +27,18 @@ public class LoginActivity extends AppCompatActivity {
     private EditText inputEmail, inputPassword;
     private FirebaseAuth mAuth;
     private ProgressBar progressBar;
-
     private DatabaseReference databaseReference;
     private Intent intent;
+    private final int MIN_PASS_LENGTH = 6;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-        // set the view now
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_login);
 
-        inputEmail = (EditText) findViewById(R.id.email);
-        inputPassword = (EditText) findViewById(R.id.password);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-
-        //Get Firebase auth instance
         mAuth = FirebaseAuth.getInstance();
+        initializeVariables();
 
         databaseReference = FirebaseDatabase.getInstance().getReference("users");
         intent = new Intent(LoginActivity.this, StartGameActivity.class);
@@ -63,18 +57,27 @@ public class LoginActivity extends AppCompatActivity {
         final String password = inputPassword.getText().toString();
 
         if (TextUtils.isEmpty(email)) {
-            Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.enter_email, Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (TextUtils.isEmpty(password)) {
-            Toast.makeText(getApplicationContext(), "Enter password!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.enter_password, Toast.LENGTH_SHORT).show();
             return;
         }
 
         progressBar.setVisibility(View.VISIBLE);
+        authenticateUser(email, password);
 
-        //authenticate user
+    }
+
+    private void initializeVariables() {
+        inputEmail = (EditText) findViewById(R.id.email);
+        inputPassword = (EditText) findViewById(R.id.password);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+    }
+
+    private void authenticateUser(final String email, final String password) {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -85,7 +88,7 @@ public class LoginActivity extends AppCompatActivity {
                         progressBar.setVisibility(View.GONE);
                         if (!task.isSuccessful()) {
                             // there was an error
-                            if (password.length() < 6) {
+                            if (password.length() < MIN_PASS_LENGTH) {
                                 inputPassword.setError(getString(R.string.minimum_password));
                             } else {
                                 Toast.makeText(LoginActivity.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
@@ -109,11 +112,11 @@ public class LoginActivity extends AppCompatActivity {
                                 }
                             });
 
-
                         }
                     }
                 });
     }
+
 
     @Override
     public void onBackPressed() {

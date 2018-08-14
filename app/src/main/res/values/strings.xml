@@ -20,4 +20,18 @@
     <string name="password">Password</string>
     <string name="username">Username</string>
     <string name="musictxt">Music:</string>
+    <string name="enter_password">Enter Password!</string>
+    <string name="enter_email">Enter email address!</string>
+    <string name="enter_username">Enter Username!</string>
+    <string name="rank_1">Film Novice</string>
+    <string name="rank_2">Casual Movie Goer</string>
+    <string name="rank_3">Cinema Prospect</string>
+    <string name="rank_4">Film Buff</string>
+    <string name="rank_5">Film Student</string>
+    <string name="rank_6">Movies Prodigy</string>
+    <string name="rank_7">Cinema Scholar</string>
+    <string name="rank_8">Movie Expert</string>
+    <string name="rank_9">Cinema God</string>
+    <string name="rank_10">Roger Ebert</string>
+
 </resources>

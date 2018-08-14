@@ -24,7 +24,9 @@ public class QuestionsActivity extends AppCompatActivity {
     private GridLayout questionsActivityGrid;
     private ArrayList<Question> questions;
     private User theUser;
+    private Soundtrack soundtrack;
     DatabaseReference databaseReference;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,10 @@ public class QuestionsActivity extends AppCompatActivity {
         String chosenTier = getIntent().getExtras().getString("chosenTier");
         theUser = (User) intent.getSerializableExtra("user");
 
+
+        soundtrack = (Soundtrack)getIntent().getSerializableExtra("soundtrack");
+
+
         questions = (ArrayList<Question>) intent.getSerializableExtra("questions");
         questionsActivityGrid = findViewById(R.id.questionsActivityGrid);
 
@@ -47,7 +53,7 @@ public class QuestionsActivity extends AppCompatActivity {
         questionsActivityGrid.setRowCount(questions.size());
         final Intent questionIntent = new Intent(this, GameScreenActivity.class);
         questionIntent.putExtra("user", theUser);
-
+        questionIntent.putExtra("soundtrack", soundtrack);
         questionIntent.putExtra("questions", questions);
 
         for (int i = 0; i < questions.size(); i++) {
@@ -106,6 +112,7 @@ public class QuestionsActivity extends AppCompatActivity {
     public void onBackPressed() {
         Intent intent = new Intent(this, TiersActivity.class);
         intent.putExtra("user", theUser);
+        intent.putExtra("soundtrack", soundtrack);
         startActivity(intent);
         finish();
     }

@@ -28,35 +28,25 @@ import java.io.IOException;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private EditText inputEmail, inputPassword, inputUsername;
+    private EditText inputEmail;
+    private EditText inputPassword;
+    private EditText inputUsername;
     private ProgressBar progressBar;
     private FirebaseAuth mAuth;
     private DatabaseReference databaseReference;
-    private Intent intent;
-    private User theUser;
+    private final int MIN_PASS_LENGTH = 6;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
-        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-        //Get Firebase instances
-        mAuth = FirebaseAuth.getInstance();
-        databaseReference = FirebaseDatabase.getInstance().getReference("users");
-        intent = new Intent(this, StartGameActivity.class);
-
-        inputEmail = (EditText) findViewById(R.id.email);
-        inputPassword = (EditText) findViewById(R.id.password);
-        inputUsername = (EditText) findViewById(R.id.username);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-
-
-
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        getFirebaseComponents();
+        initializeVariables();
 
     }
+
 
     @Override
     protected void onResume() {
@@ -70,38 +60,53 @@ public class RegisterActivity extends AppCompatActivity {
         final String username = inputUsername.getText().toString().trim();
 
         if (TextUtils.isEmpty(username)) {
-            Toast.makeText(getApplicationContext(), "Enter username!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.enter_username, Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (TextUtils.isEmpty(emailInput)) {
-            Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.enter_email, Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (TextUtils.isEmpty(password)) {
-            Toast.makeText(getApplicationContext(), "Enter password!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.enter_password, Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (password.length() < 6) {
-            Toast.makeText(getApplicationContext(), "Password too short, enter minimum 6 characters!", Toast.LENGTH_SHORT).show();
+        if (password.length() < MIN_PASS_LENGTH) {
+            Toast.makeText(getApplicationContext(), R.string.minimum_password, Toast.LENGTH_SHORT).show();
             return;
         }
 
         progressBar.setVisibility(View.VISIBLE);
-        //create user
+
+        createUser(emailInput, password, username);
+    }
+
+    private void getFirebaseComponents() {
+        mAuth = FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference("users");
+    }
+
+    private void initializeVariables() {
+        inputEmail = (EditText) findViewById(R.id.email);
+        inputPassword = (EditText) findViewById(R.id.password);
+        inputUsername = (EditText) findViewById(R.id.username);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+    }
+
+    private void createUser(final String emailInput, String password, final String username) {
         mAuth.createUserWithEmailAndPassword(emailInput, password)
                 .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Toast.makeText(RegisterActivity.this, "createUserWithEmail:onComplete:" + task.isSuccessful(), Toast.LENGTH_SHORT).show();
                         progressBar.setVisibility(View.GONE);
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
-                            Toast.makeText(RegisterActivity.this, "Authentication failed." + task.getException(),
+                            Toast.makeText(RegisterActivity.this, R.string.auth_failed + "" + task.getException(),
                                     Toast.LENGTH_LONG).show();
                             Log.e("MyTag", task.getException().toString());
                         } else {

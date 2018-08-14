@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    android:id="@+id/activity_game_screen"
+    android:id="@+id/activity_main"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,6 +9,8 @@
     android:paddingRight="16dp"
     android:paddingTop="16dp"
     android:paddingBottom="16dp"
+    android:layoutDirection="ltr"
+
     android:background="@android:color/holo_orange_dark"
     tools:context=".GameScreenActivity">
 
@@ -65,8 +67,9 @@
         android:id="@+id/answerEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/raiseIQButton"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="111dp"
         android:hint="Your Answer" />
 
     <Button
@@ -74,7 +77,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="31dp"
+        android:layout_marginBottom="14dp"
         android:layout_toStartOf="@+id/tierTextView"
         android:onClick="onClick"
         android:text="@string/submit" />
@@ -110,7 +113,7 @@
         android:id="@+id/clipButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/answerEditText"
+        android:layout_alignTop="@+id/hintButton"
         android:layout_toStartOf="@+id/tierTextView"
         android:text="Play Clip" />
 

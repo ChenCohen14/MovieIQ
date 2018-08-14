@@ -24,7 +24,8 @@
         <activity android:name=".LoginActivity" />
         <activity android:name=".FactsActivity" />
         <activity android:name=".ClipActivity" />
-        <activity android:name=".StartGameActivity"></activity>
+        <activity android:name=".StartGameActivity"/>
+        <activity android:name=".HelpScreenActivity"></activity>
     </application>
 
 </manifest>

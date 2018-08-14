@@ -15,6 +15,7 @@ public class ClipActivity extends AppCompatActivity {
     private VideoView clipView;
     private Uri clipUri;
     private Question q;
+    private Soundtrack soundtrack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +24,8 @@ public class ClipActivity extends AppCompatActivity {
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 
+        soundtrack = (Soundtrack) getIntent().getSerializableExtra("soundtrack");
+        soundtrack.getMediaPlayer().pause();
         clipView = (VideoView) findViewById(R.id.clipView);
         q = (Question) getIntent().getSerializableExtra("question");
         clipUri = Uri.parse(q.getUri());
@@ -41,6 +44,13 @@ public class ClipActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         clipView.stopPlayback();
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        soundtrack.getMediaPlayer().start();
         finish();
     }
 
