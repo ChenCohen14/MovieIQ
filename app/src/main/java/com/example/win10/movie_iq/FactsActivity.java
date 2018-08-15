@@ -7,9 +7,7 @@ import android.widget.TextView;
 
 public class FactsActivity extends AppCompatActivity {
 
-    private TextView factText1;
-    private TextView factText2;
-    private TextView factText3;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,9 +15,9 @@ public class FactsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_facts);
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        factText1 = findViewById(R.id.factText1);
-        factText2 = findViewById(R.id.factText2);
-        factText3 = findViewById(R.id.factText3);
+        TextView factText1 = findViewById(R.id.factText1);
+        TextView factText2 = findViewById(R.id.factText2);
+        TextView factText3 = findViewById(R.id.factText3);
 
         Question q = (Question) getIntent().getSerializableExtra("question");
         for(int i = 0; i < q.getFacts().size(); i++){

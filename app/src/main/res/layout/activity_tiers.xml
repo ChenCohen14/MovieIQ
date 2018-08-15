@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    android:id="@+id/activity_main"
+    android:id="@+id/activity_tiers"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,9 +9,8 @@
     android:paddingRight="16dp"
     android:paddingTop="16dp"
     android:paddingBottom="16dp"
-    android:layoutDirection="ltr"
-
     android:background="@android:color/holo_blue_dark"
+    android:layoutDirection="ltr"
     tools:context=".TiersActivity">
 
     <Button

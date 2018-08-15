@@ -7,9 +7,8 @@
     android:paddingBottom="16dp"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    android:layoutDirection="ltr"
-
     android:paddingTop="16dp"
+    android:layoutDirection="ltr"
     tools:context=".HelpScreenActivity">
 
     <TextView

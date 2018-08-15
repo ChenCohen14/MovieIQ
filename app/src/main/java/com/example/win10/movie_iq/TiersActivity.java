@@ -97,10 +97,11 @@ public class TiersActivity extends AppCompatActivity {
         rankTextView.setText(theUser.getRank());
 
         soundtrack = (Soundtrack) getIntent().getSerializableExtra("soundtrack");
-        if (soundtrack != null) {
+        if(soundtrack != null) {
             soundtrack.getMediaPlayer().stop();
             soundtrack.getMediaPlayer().reset();
-        } else
+        }
+        else
             soundtrack = new Soundtrack();
         setUpSoundtrack();
 
@@ -193,8 +194,6 @@ public class TiersActivity extends AppCompatActivity {
 
     public void onLogout(View view) {
         FirebaseAuth.getInstance().signOut();
-        if (soundtrack != null)
-            soundtrack.getMediaPlayer().stop();
         startActivity(new Intent(this, RegisterActivity.class));
         finish();
     }
@@ -251,4 +250,7 @@ public class TiersActivity extends AppCompatActivity {
         soundtrack.getMediaPlayer().start();
         soundtrack.getMediaPlayer().setLooping(true);
     }
+
+
+
 }

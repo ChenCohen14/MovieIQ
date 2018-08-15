@@ -4,8 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layoutDirection="ltr"
-
     tools:context="com.example.win10.movie_iq.RegisterActivity">
 
     <LinearLayout
@@ -28,6 +26,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/username"
+            android:gravity="left"
             android:inputType="textPersonName" />
 
         <EditText
@@ -38,6 +37,7 @@
             android:inputType="textEmailAddress"
             android:maxLines="1"
             android:singleLine="true"
+            android:gravity="left"
             android:textColor="@android:color/black" />
 
         <EditText
@@ -50,6 +50,7 @@
             android:inputType="textPassword"
             android:maxLines="1"
             android:singleLine="true"
+            android:gravity="left"
             android:textColor="@android:color/black" />
 
         <Button

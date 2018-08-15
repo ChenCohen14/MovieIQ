@@ -1,5 +1,6 @@
 package com.example.win10.movie_iq;
 
+import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -21,6 +22,8 @@ public class HelpScreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help_screen);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         helpTextView = findViewById(R.id.helpTextView);
         tip1TextView = findViewById(R.id.tip1TextView);
         tip2TextView = findViewById(R.id.tip2TextView);
