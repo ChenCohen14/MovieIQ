@@ -20,6 +20,7 @@ import java.io.IOException;
 public class StartGameActivity extends AppCompatActivity {
     private User theUser;
     private ProgressBar pb;
+    private static final String TAG = "StartGameActivity";
 
 
     @Override
@@ -45,6 +46,7 @@ public class StartGameActivity extends AppCompatActivity {
 //                Intent intent = new Intent(StartGameActivity.this, TiersActivity.class);
 //                intent.putExtra("user", theUser);
 //                startActivity(intent);
+                pb.setVisibility(View.VISIBLE);
                 new MyAsyncTask().execute();
             }
         });
@@ -71,8 +73,12 @@ public class StartGameActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(this, RegisterActivity.class);
+        intent.putExtra("TAG",TAG);
+        startActivity(intent);
+
         finish();
-        onDestroy();
+       // onDestroy();
     }
 
     class MyAsyncTask extends AsyncTask<Void, Integer, Integer>{
@@ -81,7 +87,7 @@ public class StartGameActivity extends AppCompatActivity {
 
      @Override
      protected Integer doInBackground(Void... voids) {
-         pb.setVisibility(View.VISIBLE);
+        // pb.setVisibility(View.VISIBLE);
          Intent intent = new Intent(StartGameActivity.this, TiersActivity.class);
          intent.putExtra("user", theUser);
          startActivity(intent);

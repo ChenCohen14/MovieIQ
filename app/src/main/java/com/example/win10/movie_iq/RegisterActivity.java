@@ -131,9 +131,11 @@ public class RegisterActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        finish();
-        onDestroy();
+       String TAG = getIntent().getExtras().getString("TAG");
+       if(TAG != null && TAG.equals("StartGameActivity"))
+           return;
+       else
+           finish();
     }
 
     public void onLoginClicked(View view) {
