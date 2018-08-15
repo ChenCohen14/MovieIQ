@@ -129,6 +129,12 @@ public class RegisterActivity extends AppCompatActivity {
                 });
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        onDestroy();
+    }
 
     public void onLoginClicked(View view) {
         startActivity(new Intent(this, LoginActivity.class));

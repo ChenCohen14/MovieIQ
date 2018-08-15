@@ -33,5 +33,7 @@
     <string name="rank_8">Movie Expert</string>
     <string name="rank_9">Cinema God</string>
     <string name="rank_10">Roger Ebert</string>
+    <string name="how_to_play">How To Play</string>
+    <string name="start_game">Start Game</string>
 
 </resources>

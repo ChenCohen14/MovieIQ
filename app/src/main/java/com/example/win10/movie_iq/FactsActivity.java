@@ -36,4 +36,10 @@ public class FactsActivity extends AppCompatActivity {
         super.onDestroy();
         finish();
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }
