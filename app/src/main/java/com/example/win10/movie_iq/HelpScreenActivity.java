@@ -25,9 +25,9 @@ public class HelpScreenActivity extends AppCompatActivity {
         String tip1 = "1) There are 3 hints to each movie.If the question is too hard you can always get a hint, but "
                 + "bear in mind that the score for that particular question will decrease!";
         String tip2 = "2) Abbreviations are not allowed. For example, let's say a movie description is presented, "
-                + "and you figure out the answer is 'The Lord of the Rings', writing 'LOTR' won't do.You need to type the whole name.";
+                + "and you figure out the answer is 'The Lord of the Rings', writing 'LOTR' won't do. You need to type the whole name.";
         String tip3 = " 3) Don't write the entire movie name if it's a part of a franchise. If we continue with our 'The Lord of the Rings' example, "
-                + "don't write 'The Lord of the Rings ג€“ The Return of the King' to get it right. Just writing 'The Lord of the Rings' will do just fine!";
+                + "don't write 'The Lord of the Rings - The Return of the King' to get it right. Just writing 'The Lord of the Rings' will do just fine!";
         String tip4 = "4) Lastly, there's no need to include 'The' in the answer. Writing 'Lord of the Rings' instead of 'The Lord of the Rings' is perfectly fine.";
 
 

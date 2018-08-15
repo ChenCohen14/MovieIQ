@@ -20,6 +20,7 @@ import java.io.IOException;
 public class StartGameActivity extends AppCompatActivity {
     private User theUser;
     private ProgressBar pb;
+    private Soundtrack soundtrack;
     private static final String TAG = "StartGameActivity";
 
 
@@ -30,15 +31,21 @@ public class StartGameActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 
-
-
-
-
         pb = findViewById(R.id.progressBarStartGame);
         pb.setVisibility(View.GONE);
         Button startBt = findViewById(R.id.startBt);
         Button howToPlayBt = findViewById(R.id.howToPlayBt);
         theUser = (User) getIntent().getSerializableExtra("user");
+
+
+        soundtrack = (Soundtrack) getIntent().getSerializableExtra("soundtrack");
+        if(soundtrack != null) {
+            soundtrack.getMediaPlayer().stop();
+            soundtrack.getMediaPlayer().reset();
+        }
+        else
+            soundtrack = new Soundtrack();
+        //setUpSoundtrack();
 
         startBt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,8 +53,13 @@ public class StartGameActivity extends AppCompatActivity {
 //                Intent intent = new Intent(StartGameActivity.this, TiersActivity.class);
 //                intent.putExtra("user", theUser);
 //                startActivity(intent);
+
                 pb.setVisibility(View.VISIBLE);
-                new MyAsyncTask().execute();
+                Intent intent = new Intent(StartGameActivity.this, TiersActivity.class);
+                intent.putExtra("user", theUser);
+                intent.putExtra("soundtrack", soundtrack);
+                startActivity(intent);
+              //  new MyAsyncTask().execute();
             }
         });
 
@@ -71,47 +83,70 @@ public class StartGameActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        soundtrack.getMediaPlayer().stop();
         super.onBackPressed();
         FirebaseAuth.getInstance().signOut();
         Intent intent = new Intent(this, RegisterActivity.class);
-        intent.putExtra("TAG",TAG);
+        intent.putExtra("TAG", TAG);
         startActivity(intent);
 
         finish();
-       // onDestroy();
+        // onDestroy();
     }
 
-    class MyAsyncTask extends AsyncTask<Void, Integer, Integer>{
+    class MyAsyncTask extends AsyncTask<Void, Integer, Integer> {
+
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            // pb.setVisibility(View.VISIBLE);
+            Intent intent = new Intent(StartGameActivity.this, TiersActivity.class);
+            intent.putExtra("user", theUser);
+            intent.putExtra("soundtrack", soundtrack);
+            startActivity(intent);
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pb.setVisibility(View.VISIBLE);
+
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            pb.setVisibility(View.VISIBLE);
+        }
+
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+
+        }
+    }
+
+    private void setUpSoundtrack() {
+        String uri = "https://firebasestorage.googleapis.com/v0/b/movieiq2.appspot.com/o/amellie%20soundtack.mp3?alt=media&token=eb717767-49e3-48e5-8e44-5d1d6fbf9187";
+
+        try {
+            soundtrack.getMediaPlayer().setDataSource(uri);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            soundtrack.getMediaPlayer().prepare();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        soundtrack.getMediaPlayer().start();
+        soundtrack.getMediaPlayer().setLooping(true);
+    }
 
 
 
-     @Override
-     protected Integer doInBackground(Void... voids) {
-        // pb.setVisibility(View.VISIBLE);
-         Intent intent = new Intent(StartGameActivity.this, TiersActivity.class);
-         intent.putExtra("user", theUser);
-         startActivity(intent);
-         return null;
-     }
-
-     @Override
-     protected void onPreExecute() {
-         super.onPreExecute();
-         pb.setVisibility(View.VISIBLE);
-
-     }
-
-     @Override
-     protected void onProgressUpdate(Integer... values) {
-         super.onProgressUpdate(values);
-         pb.setVisibility(View.VISIBLE);
-     }
-
-
-     @Override
-     protected void onPostExecute(Integer integer) {
-         super.onPostExecute(integer);
-
-     }
- }
 }

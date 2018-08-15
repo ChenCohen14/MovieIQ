@@ -42,8 +42,6 @@ public class TiersActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private DatabaseReference userReference;
 
-    private String[] soundtracks = new String[4];
-
 
     private ProgressBar prg;
     private int progress;
@@ -69,6 +67,8 @@ public class TiersActivity extends AppCompatActivity {
         questions = new ArrayList<>();
         databaseReference = FirebaseDatabase.getInstance().getReference("questions");
         userReference = FirebaseDatabase.getInstance().getReference("users");
+
+        soundtrack = (Soundtrack)getIntent().getSerializableExtra("soundtrack");
 
 
         prg = findViewById(R.id.progressBarTiers);
@@ -96,14 +96,6 @@ public class TiersActivity extends AppCompatActivity {
         userTextView.setText("Welcome " + theUser.getName() + "! Highscore is: " + theUser.getTotalPoints());
         rankTextView.setText(theUser.getRank());
 
-        soundtrack = (Soundtrack) getIntent().getSerializableExtra("soundtrack");
-        if(soundtrack != null) {
-            soundtrack.getMediaPlayer().stop();
-            soundtrack.getMediaPlayer().reset();
-        }
-        else
-            soundtrack = new Soundtrack();
-        setUpSoundtrack();
 
 
     }
@@ -175,22 +167,6 @@ public class TiersActivity extends AppCompatActivity {
 
     }
 
-    private boolean checkEligible(String chosenTier, Button clickedBt) {
-        int t = Character.getNumericValue(chosenTier.charAt(chosenTier.length() - 1)) - 1;
-        String prevTier = "tier" + t;
-        if (theUser.getUserTierInfos() != null) {
-            UserTierInfo uti = theUser.getUserTierInfoByTierName(prevTier);
-            if (uti != null) {
-                if (uti.getAnsweredQuestions().size() > NEXT_TIER_LIMIT) {
-                    return true;
-
-                }
-            }
-        }
-
-        return false;
-
-    }
 
     public void onLogout(View view) {
         FirebaseAuth.getInstance().signOut();
@@ -209,10 +185,10 @@ public class TiersActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        soundtrack.getMediaPlayer().stop();
         Intent intent = new Intent(this, StartGameActivity.class);
         intent.putExtra("user", theUser);
         intent.putExtra("TAG", TAG);
+        intent.putExtra("soundtrack", soundtrack);
         startActivity(intent);
         finish();
     }
@@ -224,33 +200,22 @@ public class TiersActivity extends AppCompatActivity {
     }
 
 
-    private void setUpSoundtrack() {
-        Random rnd = new Random();
-        int choice = rnd.nextInt(4);
-        String uri;
+    private boolean checkEligible(String chosenTier, Button clickedBt) {
+        int t = Character.getNumericValue(chosenTier.charAt(chosenTier.length() - 1)) - 1;
+        String prevTier = "tier" + t;
+        if (theUser.getUserTierInfos() != null) {
+            UserTierInfo uti = theUser.getUserTierInfoByTierName(prevTier);
+            if (uti != null) {
+                if (uti.getAnsweredQuestions().size() > NEXT_TIER_LIMIT) {
+                    return true;
 
-        soundtracks[0] = "https://firebasestorage.googleapis.com/v0/b/movieiq2.appspot.com/o/inception%20soundtrack.mp3?alt=media&token=d2e2add9-a5db-48f5-b892-00ea6ef197f2";
-        soundtracks[1] = "https://firebasestorage.googleapis.com/v0/b/movieiq2.appspot.com/o/amellie%20soundtack.mp3?alt=media&token=eb717767-49e3-48e5-8e44-5d1d6fbf9187";
-        soundtracks[2] = "https://firebasestorage.googleapis.com/v0/b/movieiq2.appspot.com/o/stalker%20soundtrack.mp3?alt=media&token=9ec42903-b90a-409c-a1f6-ce8be8db3c41";
-        soundtracks[3] = "https://firebasestorage.googleapis.com/v0/b/movieiq2.appspot.com/o/solaris%20soundtrack.mp3?alt=media&token=9681cb74-9fc9-4a75-8c77-6e37d4d3af41";
-        uri = soundtracks[choice];
-
-        try {
-            soundtrack.getMediaPlayer().setDataSource(uri);
-        } catch (IOException e) {
-            e.printStackTrace();
+                }
+            }
         }
 
-        try {
-            soundtrack.getMediaPlayer().prepare();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        return false;
 
-        soundtrack.getMediaPlayer().start();
-        soundtrack.getMediaPlayer().setLooping(true);
     }
-
 
 
 }
