@@ -45,21 +45,17 @@ public class StartGameActivity extends AppCompatActivity {
         }
         else
             soundtrack = new Soundtrack();
-        //setUpSoundtrack();
+        setUpSoundtrack();
 
         startBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(StartGameActivity.this, TiersActivity.class);
-//                intent.putExtra("user", theUser);
-//                startActivity(intent);
 
                 pb.setVisibility(View.VISIBLE);
                 Intent intent = new Intent(StartGameActivity.this, TiersActivity.class);
                 intent.putExtra("user", theUser);
                 intent.putExtra("soundtrack", soundtrack);
                 startActivity(intent);
-              //  new MyAsyncTask().execute();
             }
         });
 
@@ -91,42 +87,9 @@ public class StartGameActivity extends AppCompatActivity {
         startActivity(intent);
 
         finish();
-        // onDestroy();
     }
 
-    class MyAsyncTask extends AsyncTask<Void, Integer, Integer> {
 
-
-        @Override
-        protected Integer doInBackground(Void... voids) {
-            // pb.setVisibility(View.VISIBLE);
-            Intent intent = new Intent(StartGameActivity.this, TiersActivity.class);
-            intent.putExtra("user", theUser);
-            intent.putExtra("soundtrack", soundtrack);
-            startActivity(intent);
-            return null;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            pb.setVisibility(View.VISIBLE);
-
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
-            pb.setVisibility(View.VISIBLE);
-        }
-
-
-        @Override
-        protected void onPostExecute(Integer integer) {
-            super.onPostExecute(integer);
-
-        }
-    }
 
     private void setUpSoundtrack() {
         String uri = "https://firebasestorage.googleapis.com/v0/b/movieiq2.appspot.com/o/amellie%20soundtack.mp3?alt=media&token=eb717767-49e3-48e5-8e44-5d1d6fbf9187";

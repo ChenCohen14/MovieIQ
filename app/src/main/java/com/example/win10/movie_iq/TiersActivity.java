@@ -35,7 +35,7 @@ public class TiersActivity extends AppCompatActivity {
     private static final String TAG = "TiersActivity";
     private final static int QUESTION_ARR_SIZE = 10;
     private static final int NUM_OF_TIERS = 5;
-    private static final int NEXT_TIER_LIMIT = 6;
+    private static final int NEXT_TIER_LIMIT = 5;
     private Soundtrack soundtrack;
 
     private ArrayList<Question> questions;
