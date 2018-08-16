@@ -28,6 +28,8 @@ import java.io.IOException;
 
 public class RegisterActivity extends AppCompatActivity {
 
+
+    // Variables
     private EditText inputEmail;
     private EditText inputPassword;
     private EditText inputUsername;
@@ -42,8 +44,8 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        getFirebaseComponents();
-        initializeVariables();
+        getFirebaseComponents(); // Calling method to arrange firebase components.
+        initializeVariables(); // Calling method to arrange variables.
 
     }
 
@@ -51,14 +53,16 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        progressBar.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE); //If activity is resumed, make the progress bar invisible.
     }
 
     public void onRegisterClicked(View view) {
+        // Variables needed for user creation.
         final String emailInput = inputEmail.getText().toString().trim();
         String password = inputPassword.getText().toString().trim();
         final String username = inputUsername.getText().toString().trim();
 
+        // Prompts for the user if input is lackluster.
         if (TextUtils.isEmpty(username)) {
             Toast.makeText(getApplicationContext(), R.string.enter_username, Toast.LENGTH_SHORT).show();
             return;
@@ -79,17 +83,19 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        progressBar.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.VISIBLE); // Setting progress bar to visible.
 
-        createUser(emailInput, password, username);
+        createUser(emailInput, password, username); // Calling method to create a new user.
     }
 
     private void getFirebaseComponents() {
-        mAuth = FirebaseAuth.getInstance();
-        databaseReference = FirebaseDatabase.getInstance().getReference("users");
+        mAuth = FirebaseAuth.getInstance(); // Getting an instance of firebase authorization.
+        databaseReference = FirebaseDatabase.getInstance().getReference(getString(R.string.users)); // Getting a reference to one of our sub-trees within the database.
     }
 
     private void initializeVariables() {
+
+        // Variables initialization.
         inputEmail = (EditText) findViewById(R.id.email);
         inputPassword = (EditText) findViewById(R.id.password);
         inputUsername = (EditText) findViewById(R.id.username);
@@ -102,14 +108,11 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         progressBar.setVisibility(View.GONE);
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
+                        // If sign in fails, display a message to the user.
                         if (!task.isSuccessful()) {
                             Toast.makeText(RegisterActivity.this, R.string.auth_failed + "" + task.getException(),
                                     Toast.LENGTH_LONG).show();
-                            Log.e("MyTag", task.getException().toString());
-                        } else {
+                        } else { // If sign in succeeds, create a new user and add it to the database.
 
 
                             Intent intent = new Intent(RegisterActivity.this, StartGameActivity.class);
@@ -119,7 +122,7 @@ public class RegisterActivity extends AppCompatActivity {
                             User theUser = new User(emailInput, username, userID);
                             String transMail = theUser.getUserEmail().replace(".", "_");
                             databaseReference.child(transMail).setValue(theUser);
-                            intent.putExtra("user", theUser);
+                            intent.putExtra(getString(R.string.user), theUser);
 
                             startActivity(intent);
                             finish();
@@ -131,14 +134,15 @@ public class RegisterActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-       String TAG = getIntent().getExtras().getString("TAG");
-       if(TAG != null && TAG.equals("StartGameActivity"))
-           return;
-       else
-           finish();
+        String TAG = getIntent().getExtras().getString("TAG");
+        if (TAG != null)
+            if (TAG.equals("TiersActivity") || TAG.equals("StartGameActivity"))
+                return;
+            else
+                finish();
     }
 
     public void onLoginClicked(View view) {
-        startActivity(new Intent(this, LoginActivity.class));
+        startActivity(new Intent(this, LoginActivity.class)); // If user is already logged in, navigate to the login page.
     }
 }

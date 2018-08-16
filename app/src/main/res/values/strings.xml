@@ -1,13 +1,16 @@
 <resources>
     <string name="app_name">Movie-IQ</string>
     <string name="enter_your_name">Enter Your Name</string>
-    <string name="points">Points:</string>
+    <string name="points">Points: </string>
+    <string name="tier">Tier</string>
+    <string name="welcome">Welcome</string>
+    <string name="highscore">! Highscore is:</string>
     <string name="submit">Submit</string>
-    <string name="tier_1">Tier 1</string>
-    <string name="tier_2">Tier 2</string>
-    <string name="tier_3">Tier 3</string>
-    <string name="tier_4">Tier 4</string>
-    <string name="tier_5">Tier 5</string>
+    <string name="tier_1">Tier1</string>
+    <string name="tier_2">Tier2</string>
+    <string name="tier_3">Tier3</string>
+    <string name="tier_4">Tier4</string>
+    <string name="tier_5">Tier5</string>
     <string name="action_sign_in_short">Register</string>
     <string name="email">Email</string>
     <string name="minimum_password">Password too short, enter minimum 6 characters!</string>
@@ -35,5 +38,30 @@
     <string name="rank_10">Roger Ebert</string>
     <string name="how_to_play">How To Play</string>
     <string name="start_game">Start Game</string>
+    <string name="user">user</string>
+    <string name="users">users</string>
+    <string name="soundtrack">soundtrack</string>
+    <string name="dot">.</string>
+    <string name="underscore">_</string>
+    <string name="chosen_tier">chosenTier</string>
+    <string name="chosen_bt">chosenBt</string>
+    <string name="questions">questions</string>
+    <string name="question">question</string>
+    <string name="well_done">Well Done!</string>
+    <string name="failure">Try Again</string>
+    <string name="answer_prompt">The answer is:</string>
+    <string name="tier_blocked">"You must answer at least 5 question in the previous tier in order to open this one!"</string>
+    <string name="play_clip">Play Clip</string>
+    <string name="your_answer">Your Answer</string>
+    <string name="description">description</string>
+    <string name="raise_my_movie_iq">Raise My Movie-IQ!</string>
+    <string name="hints">Hints</string>
+    <string name="hint">Hint</string>
+    <string name="fact1">fact1</string>
+    <string name="fact2">fact2</string>
+    <string name="fact3">fact3</string>
+    <string name="welcome_to">Welcome to</string>
+    <string name="movieiq">MovieIQ</string>
+    <string name="rank">Rank:</string>
 
 </resources>

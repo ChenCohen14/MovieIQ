@@ -21,6 +21,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class QuestionsActivity extends AppCompatActivity {
+
+    // Variables.
+    private final int COL_SIZE = 1;
     private GridLayout questionsActivityGrid;
     private ArrayList<Question> questions;
     private User theUser;
@@ -32,73 +35,23 @@ public class QuestionsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_questions);
-        setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        String chosenTier = getIntent().getExtras().getString(getString(R.string.chosen_tier));
+        theUser = (User) getIntent().getSerializableExtra(getString(R.string.user));
+        questions = (ArrayList<Question>) getIntent().getSerializableExtra(getString(R.string.questions));
 
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("users");
-
-
-        final Intent intent = getIntent();
-        String chosenTier = getIntent().getExtras().getString("chosenTier");
-        theUser = (User) intent.getSerializableExtra("user");
-
-
-        soundtrack = (Soundtrack)getIntent().getSerializableExtra("soundtrack");
-
-
-        questions = (ArrayList<Question>) intent.getSerializableExtra("questions");
-        questionsActivityGrid = findViewById(R.id.questionsActivityGrid);
-
-        questionsActivityGrid.setColumnCount(1);
-        questionsActivityGrid.setRowCount(questions.size());
+        setupGrid(); //Setting up the questions grid.
+        getFirebaseAndSoundtrackComponents(); //Calling a method to get firebase and soundtrack components.
+        // New Intent with needed elements for the next activity.
         final Intent questionIntent = new Intent(this, GameScreenActivity.class);
-        questionIntent.putExtra("user", theUser);
-        questionIntent.putExtra("soundtrack", soundtrack);
-        questionIntent.putExtra("questions", questions);
-
-        for (int i = 0; i < questions.size(); i++) {
-            final Button bt = new Button(this);
-
-            bt.setText("Question " + (i + 1));
+        questionIntent.putExtra(getString(R.string.user), theUser);
+        questionIntent.putExtra(getString(R.string.soundtrack), soundtrack);
+        questionIntent.putExtra(getString(R.string.questions), questions);
+        UserTierInfo userTierInfo = theUser.getUserTierInfoByTierName(chosenTier);
 
 
-            UserTierInfo userTierInfo = theUser.getUserTierInfoByTierName(chosenTier);
-            if(userTierInfo.checkIfTheQuestionIsAnsweredByAnswer(questions.get(i).getAnswer()))
-                bt.setTextColor(Color.BLUE);
-
-
-            questionIntent.putExtra("question" + (i + 1), questions.get(i));
-            questionsActivityGrid.addView(bt);
-            bt.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String chosenBt = bt.getText().toString().toLowerCase().replace(" ", "");
-                    questionIntent.putExtra("chosenBt", chosenBt);
-
-
-                    String transMail = theUser.getUserEmail().replace(".", "_");
-                    databaseReference.child(transMail).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            User user = dataSnapshot.getValue(User.class);
-                            if (user.getUserTierInfos() != null)
-                                questionIntent.putExtra("user", user);
-
-                            startActivity(questionIntent);
-
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
-
-                }
-            });
-
-        }
-
+        buildGridAndStartNextActivity(userTierInfo, questionIntent);
 
     }
 
@@ -110,9 +63,11 @@ public class QuestionsActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+
+        //If the user returns back, start previous screen again.
         Intent intent = new Intent(this, TiersActivity.class);
-        intent.putExtra("user", theUser);
-        intent.putExtra("soundtrack", soundtrack);
+        intent.putExtra(getString(R.string.user), theUser);
+        intent.putExtra(getString(R.string.soundtrack), soundtrack);
         startActivity(intent);
         finish();
     }
@@ -121,6 +76,64 @@ public class QuestionsActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         finish();
+    }
+
+    private void setupGrid() {
+
+        // Setting up questions grid.
+        questionsActivityGrid = findViewById(R.id.questionsActivityGrid);
+        questionsActivityGrid.setColumnCount(COL_SIZE);
+        questionsActivityGrid.setRowCount(questions.size());
+
+    }
+
+    private void getFirebaseAndSoundtrackComponents() {
+
+        //Initialize firebase and soundtrack components.
+        databaseReference = FirebaseDatabase.getInstance().getReference(getString(R.string.users));
+        soundtrack = (Soundtrack) getIntent().getSerializableExtra(getString(R.string.soundtrack));
+    }
+
+    private void buildGridAndStartNextActivity(UserTierInfo userTierInfo, final Intent questionIntent) {
+        for (int i = 0; i < questions.size(); i++) {
+            final Button bt = new Button(this);
+            bt.setText("Question " + (i + 1));
+
+            // If question is answered, show in blue to indicate it.
+            if (userTierInfo.checkIfTheQuestionIsAnsweredByAnswer(questions.get(i).getAnswer()))
+                bt.setTextColor(Color.BLUE);
+
+            questionIntent.putExtra(getString(R.string.question) + (i + 1), questions.get(i)); // Putting each question in the Intent.
+
+            questionsActivityGrid.addView(bt); // Adding to grid.
+
+            bt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String chosenBt = bt.getText().toString().toLowerCase().replace(" ", "");
+                    questionIntent.putExtra(getString(R.string.chosen_bt), chosenBt);
+
+
+                    String transMail = theUser.getUserEmail().replace(".", "_");
+                    databaseReference.child(transMail).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            User user = dataSnapshot.getValue(User.class);// Getting the user from database.
+                            if (user.getUserTierInfos() != null)
+                                questionIntent.putExtra(getString(R.string.user), user); // Placing the user inside the Intent for the next activity.
+
+                            startActivity(questionIntent); // Starting next activity.
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            });
+        }
     }
 
 }

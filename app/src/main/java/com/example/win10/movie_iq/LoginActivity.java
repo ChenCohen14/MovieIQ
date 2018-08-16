@@ -24,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
 
+    // Variables.
     private EditText inputEmail, inputPassword;
     private FirebaseAuth mAuth;
     private ProgressBar progressBar;
@@ -37,10 +38,8 @@ public class LoginActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_login);
 
-        mAuth = FirebaseAuth.getInstance();
-        initializeVariables();
-
-        databaseReference = FirebaseDatabase.getInstance().getReference("users");
+        getFirebaseComponents(); // Calling method to arrange firebase components.
+        initializeVariables(); // Calling method to arrange variables.
         intent = new Intent(LoginActivity.this, StartGameActivity.class);
 
 
@@ -49,13 +48,16 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        progressBar.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE); //If activity is resumed, make the progress bar invisible.
     }
 
     public void loginButtonClicked(View view) {
+
+        // Variables extracted from the edit text.
         final String email = inputEmail.getText().toString();
         final String password = inputPassword.getText().toString();
 
+        // Prompt for the user if input is lackluster.
         if (TextUtils.isEmpty(email)) {
             Toast.makeText(getApplicationContext(), R.string.enter_email, Toast.LENGTH_SHORT).show();
             return;
@@ -66,12 +68,19 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        progressBar.setVisibility(View.VISIBLE);
-        authenticateUser(email, password);
+        progressBar.setVisibility(View.VISIBLE); // Setting progress bar to visible.
+        authenticateUser(email, password); // Calling a method to authenticate the user.
 
     }
 
+    private void getFirebaseComponents() {
+        mAuth = FirebaseAuth.getInstance(); // Getting an instance of firebase authorization.
+        databaseReference = FirebaseDatabase.getInstance().getReference(getString(R.string.users)); // Getting a reference to one of our sub-trees within the database.
+    }
+
     private void initializeVariables() {
+
+        // Variables initialization.
         inputEmail = (EditText) findViewById(R.id.email);
         inputPassword = (EditText) findViewById(R.id.password);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -82,9 +91,7 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
+                        // If sign in fails, display a message to the user.
                         progressBar.setVisibility(View.GONE);
                         if (!task.isSuccessful()) {
                             // there was an error
@@ -93,15 +100,15 @@ public class LoginActivity extends AppCompatActivity {
                             } else {
                                 Toast.makeText(LoginActivity.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
                             }
-                        } else {
+                        } else { //If sign in succeeds, get the user from the database and put it in Intent for the next activity.
 
-                            String transMail = email.replace(".", "_");
+                            String transMail = email.replace(getString(R.string.dot), getString(R.string.underscore));
                             databaseReference.child(transMail).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
                                     User theUser = dataSnapshot.getValue(User.class);
 
-                                    intent.putExtra("user", theUser);
+                                    intent.putExtra(getString(R.string.user), theUser);
                                     startActivity(intent);
                                     finish();
                                 }
@@ -111,7 +118,6 @@ public class LoginActivity extends AppCompatActivity {
 
                                 }
                             });
-
                         }
                     }
                 });

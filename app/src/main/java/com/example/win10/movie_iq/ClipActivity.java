@@ -13,6 +13,7 @@ import android.widget.VideoView;
 
 public class ClipActivity extends AppCompatActivity {
 
+    // Variables.
     private VideoView clipView;
     private Uri clipUri;
     private Question q;
@@ -27,10 +28,13 @@ public class ClipActivity extends AppCompatActivity {
 
         pb = findViewById(R.id.progressBarClip);
         pb.setVisibility(View.VISIBLE);
-        soundtrack = (Soundtrack) getIntent().getSerializableExtra("soundtrack");
-        soundtrack.getMediaPlayer().pause();
+
+        soundtrack = (Soundtrack) getIntent().getSerializableExtra(getString(R.string.soundtrack));
+        soundtrack.getMediaPlayer().pause(); // Pausing soundtrack.
+
+        // Clip setup.
         clipView = (VideoView) findViewById(R.id.clipView);
-        q = (Question) getIntent().getSerializableExtra("question");
+        q = (Question) getIntent().getSerializableExtra(getString(R.string.question));
         clipUri = Uri.parse(q.getUri());
         clipView.setVideoURI(clipUri);
         clipView.requestFocus();
@@ -41,7 +45,7 @@ public class ClipActivity extends AppCompatActivity {
                 mp.setLooping(true);
             }
         });
-        clipView.start();
+        clipView.start(); // Start clip on a loop.
     }
 
     @Override
@@ -54,7 +58,7 @@ public class ClipActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        soundtrack.getMediaPlayer().start();
+        soundtrack.getMediaPlayer().start(); // Resuming soundtrack.
         finish();
     }
 

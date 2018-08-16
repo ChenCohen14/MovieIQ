@@ -32,6 +32,8 @@ import java.util.Map;
 import java.util.Random;
 
 public class TiersActivity extends AppCompatActivity {
+
+    // Variables.
     private static final String TAG = "TiersActivity";
     private final static int QUESTION_ARR_SIZE = 10;
     private static final int NUM_OF_TIERS = 5;
@@ -62,19 +64,157 @@ public class TiersActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tiers);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-
         questions = new ArrayList<>();
-        databaseReference = FirebaseDatabase.getInstance().getReference("questions");
-        userReference = FirebaseDatabase.getInstance().getReference("users");
+        theUser = (User) getIntent().getSerializableExtra(getString(R.string.user));
 
-        soundtrack = (Soundtrack)getIntent().getSerializableExtra("soundtrack");
+        getFirebaseAndSoundtrackComponents(); // Calling method to arrange firebase and soundtrack components.
+        initializeVariables(); // Calling method to arrange variables.
+        showHighscoreAndRank(); //Calling a method to display user name, highscore, and rank.
+    }
 
 
+    public void onClick(View view) {
+
+        //Variables.
+        final Intent intent = new Intent(this, QuestionsActivity.class);
+        final Button clickedBt = findViewById(view.getId());
+        final String chosenTier = clickedBt.getText().toString().toLowerCase().replace(" ", "");
+
+        lockOrEnableAllTiers(tiersBtnArr, false); //Calling a method to disable clicking on other buttons.
+
+        // If the user clicked on any tiers that's not the first, check if it's eligible for opening,
+        // and if not, display a message.
+        if (!chosenTier.equalsIgnoreCase(getString(R.string.tier_1))) {
+            if (!checkEligible(chosenTier, clickedBt)) {
+                Toast.makeText(getApplicationContext(), getString(R.string.tier_blocked), Toast.LENGTH_LONG).show();
+                lockOrEnableAllTiers(tiersBtnArr, true);
+                return;
+            }
+        }
+
+        questions.clear();
+        prg.setVisibility(View.VISIBLE);
+        prg.setProgress(0);
+
+        // Get 10 questions for the tier that was chosen, and start the next activity.
+        getQuestionsFromDatabaseAndStartNextActivity(chosenTier, intent);
+    }
+
+    private void getQuestionsFromDatabaseAndStartNextActivity(final String chosenTier, final Intent intent) {
+
+        // A loop that reaches to the database and adds them to an ArrayList.
+        for (int i = 1; i <= QUESTION_ARR_SIZE; i++) {
+            databaseReference.child(chosenTier).child(Integer.toString(i - 1)).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Question q = new Question();
+                    q = dataSnapshot.getValue(Question.class);
+                    questions.add(q);
+
+                    progress += 100 / QUESTION_ARR_SIZE;
+                    prg.setProgress(progress);
+
+
+                    if (questions.size() == QUESTION_ARR_SIZE) {
+                        intent.putExtra(getString(R.string.questions), questions);
+
+
+                        // Adding chosen tier information to the user + updating the user entry within the database.
+                        UserTierInfo userTierInfo = new UserTierInfo(chosenTier);
+                        if (!theUser.isExistUserTierInfo(userTierInfo)) {
+                            theUser.addUserTierInfo(userTierInfo);
+                            userReference.child(theUser.getUserEmail().replace(getString(R.string.dot), getString(R.string.underscore))).setValue(theUser);
+                        }
+
+
+                        // Starting the next activity with the needed variables and values.
+                        intent.putExtra(getString(R.string.user), theUser);
+                        intent.putExtra(getString(R.string.chosen_tier), chosenTier);
+                        intent.putExtra(getString(R.string.soundtrack), soundtrack);
+                        startActivity(intent);
+                    }
+                }
+
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+    }
+
+
+    public void onLogout(View view) {
+        FirebaseAuth.getInstance().signOut();
+        if (soundtrack != null)
+            soundtrack.getMediaPlayer().stop();
+        Intent intent = new Intent(this, RegisterActivity.class);
+        intent.putExtra("TAG", TAG);
+        startActivity(intent);
+        finish();
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        prg.setProgress(0);
+        prg.setVisibility(View.INVISIBLE);
+        theUser = (User) getIntent().getSerializableExtra(getString(R.string.user));
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        //If the user returns back, start previous screen again.
+        Intent intent = new Intent(this, StartGameActivity.class);
+        intent.putExtra(getString(R.string.user), theUser);
+        intent.putExtra("TAG", TAG);
+        intent.putExtra(getString(R.string.soundtrack), soundtrack);
+        startActivity(intent);
+        finish();
+    }
+
+    // A method that locks all tier buttons.
+    private void lockOrEnableAllTiers(Button[] arr, boolean value) {
+        for (int i = 0; i < arr.length; i++)
+            arr[i].setClickable(value);
+    }
+
+
+    // A method that checks if a certain tier can be opened or not.
+    private boolean checkEligible(String chosenTier, Button clickedBt) {
+        int t = Character.getNumericValue(chosenTier.charAt(chosenTier.length() - 1)) - 1;
+        String prevTier = getString(R.string.tier) + t;
+        if (theUser.getUserTierInfos() != null) {
+            UserTierInfo uti = theUser.getUserTierInfoByTierName(prevTier);
+            if (uti != null) {
+                if (uti.getAnsweredQuestions().size() > NEXT_TIER_LIMIT) {
+                    return true;
+
+                }
+            }
+        }
+        return false;
+    }
+
+
+    private void getFirebaseAndSoundtrackComponents() {
+
+        //Initialize firebase and soundtrack components.
+        databaseReference = FirebaseDatabase.getInstance().getReference(getString(R.string.questions));
+        userReference = FirebaseDatabase.getInstance().getReference(getString(R.string.users));
+        soundtrack = (Soundtrack) getIntent().getSerializableExtra(getString(R.string.soundtrack));
+    }
+
+    private void initializeVariables() {
+
+        // Initialize relevant variables.
         prg = findViewById(R.id.progressBarTiers);
         prg.setVisibility(View.INVISIBLE);
         progress = 0;
-
 
         btTier1 = findViewById(R.id.tier1);
         btTier2 = findViewById(R.id.tier2);
@@ -88,133 +228,15 @@ public class TiersActivity extends AppCompatActivity {
         tiersBtnArr[2] = btTier3;
         tiersBtnArr[3] = btTier4;
         tiersBtnArr[4] = btTier5;
+    }
 
-        //Show username + highscore + rank
-        theUser = (User) getIntent().getSerializableExtra("user");
+    private void showHighscoreAndRank() {
+
+        // Displayes user name, highscore, and rank.
         userTextView = findViewById(R.id.userTextView);
         rankTextView = findViewById(R.id.rankTextView);
-        userTextView.setText("Welcome " + theUser.getName() + "! Highscore is: " + theUser.getTotalPoints());
+        userTextView.setText(getString(R.string.welcome) + " " + theUser.getName() + getString(R.string.highscore) + " " + theUser.getTotalPoints());
         rankTextView.setText(theUser.getRank());
-
-
-
-    }
-
-
-    public void onClick(View view) {
-        final Intent intent = new Intent(this, QuestionsActivity.class);
-        final Button clickedBt = findViewById(view.getId());
-        final String chosenTier = clickedBt.getText().toString().toLowerCase().replace(" ", "");
-
-        lockOrEnableAllTiers(tiersBtnArr, false);
-
-        if (!chosenTier.equalsIgnoreCase("tier1")) {
-            if (!checkEligible(chosenTier, clickedBt)) {
-                Toast.makeText(getApplicationContext(), "You must answer at least 5 question in the previous tier" +
-                        " in order to open this one!", Toast.LENGTH_LONG).show();
-
-
-                lockOrEnableAllTiers(tiersBtnArr, true);
-
-                return;
-            }
-        }
-
-
-        questions.clear();
-        prg.setVisibility(View.VISIBLE);
-        prg.setProgress(0);
-        for (int i = 1; i <= QUESTION_ARR_SIZE; i++) {
-            databaseReference.child(chosenTier).child(Integer.toString(i - 1)).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Log.d(TAG, "loading a question");
-                    Question q = new Question();
-                    q = dataSnapshot.getValue(Question.class);
-                    questions.add(q);
-
-                    progress += 100 / QUESTION_ARR_SIZE;
-                    prg.setProgress(progress);
-
-
-                    if (questions.size() == QUESTION_ARR_SIZE) {
-                        intent.putExtra("questions", questions);
-
-
-                        UserTierInfo userTierInfo = new UserTierInfo(chosenTier);
-                        if (!theUser.isExistUserTierInfo(userTierInfo)) {
-                            theUser.addUserTierInfo(userTierInfo);
-                            userReference.child(theUser.getUserEmail().replace(".", "_")).setValue(theUser);
-                        }
-
-                        intent.putExtra("user", theUser);
-                        intent.putExtra("chosenTier", chosenTier);
-                        intent.putExtra("soundtrack", soundtrack);
-                        startActivity(intent);
-
-
-                    }
-                }
-
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-        }
-
-
-    }
-
-
-    public void onLogout(View view) {
-        FirebaseAuth.getInstance().signOut();
-        startActivity(new Intent(this, RegisterActivity.class));
-        finish();
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        prg.setProgress(0);
-        prg.setVisibility(View.INVISIBLE);
-        theUser = (User) getIntent().getSerializableExtra("user");
-    }
-
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(this, StartGameActivity.class);
-        intent.putExtra("user", theUser);
-        intent.putExtra("TAG", TAG);
-        intent.putExtra("soundtrack", soundtrack);
-        startActivity(intent);
-        finish();
-    }
-
-
-    private void lockOrEnableAllTiers(Button[] arr, boolean value) {
-        for (int i = 0; i < arr.length; i++)
-            arr[i].setClickable(value);
-    }
-
-
-    private boolean checkEligible(String chosenTier, Button clickedBt) {
-        int t = Character.getNumericValue(chosenTier.charAt(chosenTier.length() - 1)) - 1;
-        String prevTier = "tier" + t;
-        if (theUser.getUserTierInfos() != null) {
-            UserTierInfo uti = theUser.getUserTierInfoByTierName(prevTier);
-            if (uti != null) {
-                if (uti.getAnsweredQuestions().size() > NEXT_TIER_LIMIT) {
-                    return true;
-
-                }
-            }
-        }
-
-        return false;
-
     }
 
 

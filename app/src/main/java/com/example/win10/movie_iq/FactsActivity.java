@@ -19,7 +19,9 @@ public class FactsActivity extends AppCompatActivity {
         TextView factText2 = findViewById(R.id.factText2);
         TextView factText3 = findViewById(R.id.factText3);
 
-        Question q = (Question) getIntent().getSerializableExtra("question");
+        Question q = (Question) getIntent().getSerializableExtra(getString(R.string.question));
+
+        // Facts setup.
         for(int i = 0; i < q.getFacts().size(); i++){
             String fact = q.getFacts().get(i);
             if(i == 0)

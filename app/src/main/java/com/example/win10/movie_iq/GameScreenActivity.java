@@ -46,6 +46,17 @@ public class GameScreenActivity extends AppCompatActivity {
     private Integer currentPoints;
     private Soundtrack soundtrack;
     DatabaseReference databaseReference;
+    private static final int MIN_GOER = 50;
+    private static final int MAX_GOER = 100;
+    private static final int MAX_PROSPECT = 150;
+    private static final int MAX_BUFF = 200;
+    private static final int MAX_STUDENT = 250;
+    private static final int MAX_PRODIGY = 300;
+    private static final int MAX_SCHOLAR = 350;
+    private static final int MAX_EXPERT = 400;
+    private static final int MAX_GOD = 450;
+    private static final int MAX_EBERT = 500;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,32 +64,32 @@ public class GameScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game_screen);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-
-
-        soundtrack = (Soundtrack)getIntent().getSerializableExtra("soundtrack");
-        String chosenBt = getIntent().getExtras().getString("chosenBt");
-        questions = (ArrayList<Question>) getIntent().getSerializableExtra("questions");
+        // Initializing different elements that are needed in the activity.
+        theUser = (User) getIntent().getSerializableExtra(getString(R.string.user));
+        questions = (ArrayList<Question>) getIntent().getSerializableExtra(getString(R.string.questions));
+        final String email = theUser.getUserEmail().replace(getString(R.string.dot), getString(R.string.underscore));
+        String chosenBt = getIntent().getExtras().getString(getString(R.string.chosen_bt));
         theQuestion = (Question) getIntent().getSerializableExtra(chosenBt);
         solutions = theQuestion.getSolutions();
-        databaseReference = FirebaseDatabase.getInstance().getReference("users");
-        theUser = (User) getIntent().getSerializableExtra("user");
-        final String email = theUser.getUserEmail().replace(".", "_");
 
 
+        getFirebaseAndSoundtrackComponents(); // Getting firebase and soundtrack components.
         initializeVariables();
-        userTierInfo = theUser.getUserTierInfoByTierName(tierText.getText().toString().toLowerCase().replace(" ", ""));
-        setCurrentPoints(userTierInfo);
-        numOfHintsTaken = userTierInfo.getNumOfHintsTaken(theQuestion.getAnswer());
-        exposeHints(numOfHintsTaken);
-        checkAnsweredQuestion(userTierInfo);
+
+        userTierInfo = theUser.getUserTierInfoByTierName(tierText.getText().toString().toLowerCase().replace(" ", "")); // Getting user tier info by the tier that the user is currently on.
+        setCurrentPoints(userTierInfo); // Setting the current points based on data in the user tier info object.
+        numOfHintsTaken = userTierInfo.getNumOfHintsTaken(theQuestion.getAnswer()); // Getting number of hints taken from the user tier info.
+        exposeHints(numOfHintsTaken); // Exposing hints based on number of hints taken.
+        checkAnsweredQuestion(userTierInfo); // Calling a method to check if the current question was answered.
 
 
+        // Listeners for each button.
         clipBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent ClipIntent = new Intent(getApplicationContext(), ClipActivity.class);
-                ClipIntent.putExtra("question", theQuestion);
-                ClipIntent.putExtra("soundtrack", soundtrack);
+                ClipIntent.putExtra(getString(R.string.question), theQuestion);
+                ClipIntent.putExtra(getString(R.string.soundtrack), soundtrack);
                 startActivity(ClipIntent);
             }
         });
@@ -88,17 +99,18 @@ public class GameScreenActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 for (int i = numOfHintsTaken; i < isHint.length; i++) {
-                    String hint = theQuestion.getHints().get(i);
-                    if (isHint[i] == false) {
-                        currentPoints -= REDUCED_POINTS;
-                        userTierInfo.getCurrentPointsForQuestion().put(theQuestion.getAnswer(), currentPoints);
+                    String hint = theQuestion.getHints().get(i); // Getting hint.
+                    if (isHint[i] == false) { // If hint wasn't used prior.
+                        currentPoints -= REDUCED_POINTS; // Reduce 2 points.
+                        userTierInfo.getCurrentPointsForQuestion().put(theQuestion.getAnswer(), currentPoints); // Update points value in the user object.
 
 
-                        userTierInfo.addHintTakedIndexed(theQuestion.getAnswer());
-                        databaseReference.child(email).setValue(theUser);
+                        userTierInfo.addHintTakedIndexed(theQuestion.getAnswer()); // Add number of hints taken.
+                        databaseReference.child(email).setValue(theUser); // Update database with the relevant number of hints and current points for the question.
 
 
-                        pointsText.setText("Points " + Integer.toString(currentPoints));
+                        // Setting the text in one of the text views.
+                        pointsText.setText(getString(R.string.points) + Integer.toString(currentPoints));
                         if (i == 0)
                             hintText1.setText(hint);
                         else if (i == 1)
@@ -118,21 +130,24 @@ public class GameScreenActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String answer = answerEditText.getText().toString();
                 for (int i = 0; i < solutions.size(); i++) {
-                    if (answer.equalsIgnoreCase(solutions.get(i))) {
+                    if (answer.equalsIgnoreCase(solutions.get(i))) { //If answer is correct.
 
-                        Toast.makeText(getApplicationContext(), "Well Done!!", Toast.LENGTH_SHORT).show();
-                        theUser.setTotalPoints(currentPoints);
-                        determineRank(theUser);
-                        userTierInfo.addAnsweredQuestion(theQuestion);
-                        databaseReference.child(email).setValue(theUser);
-                        submitBtn.setEnabled(false);
-                        hintBtn.setEnabled(false);
-                        factsBtn.setEnabled(true);
-                        clipBtn.setEnabled(true);
+                        Toast.makeText(getApplicationContext(), getString(R.string.well_done), Toast.LENGTH_SHORT).show(); // Success message for the user.
+                        theUser.setTotalPoints(currentPoints); // Updating total points.
+                        determineRank(theUser); // Determining rank based on total points.
+                        userTierInfo.addAnsweredQuestion(theQuestion); // Adding question that was answered to the user.
+                        databaseReference.child(email).setValue(theUser); // Updating database.
+                        submitBtn.setEnabled(false); // Disabling submit button.
+                        hintBtn.setEnabled(false); // Disabling hint button.
+                        factsBtn.setEnabled(true); // Enabling facts button as reward..
+                        clipBtn.setEnabled(true); // Enabling clip button as reward.
 
-                        break;
+                        return;
                     }
+
                 }
+                Toast.makeText(getApplicationContext(), getString(R.string.failure), Toast.LENGTH_SHORT).show(); // If failure, show failure prompt.
+
 
             }
         });
@@ -141,7 +156,7 @@ public class GameScreenActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent factsIntent = new Intent(getApplicationContext(), FactsActivity.class);
-                factsIntent.putExtra("question", theQuestion);
+                factsIntent.putExtra(getString(R.string.question), theQuestion);
                 startActivity(factsIntent);
             }
         });
@@ -149,9 +164,9 @@ public class GameScreenActivity extends AppCompatActivity {
 
     }
 
-
     private void initializeVariables() {
 
+        // Initialize and setup variables.
         hintBtn = findViewById(R.id.hintButton);
         submitBtn = findViewById(R.id.submitButton);
         factsBtn = findViewById(R.id.raiseIQButton);
@@ -169,7 +184,7 @@ public class GameScreenActivity extends AppCompatActivity {
         clipBtn.setEnabled(false);
 
         questionText.setText(theQuestion.getQuestion());
-        tierText.setText("Tier " + Integer.toString(theQuestion.getTier()));
+        tierText.setText(getString(R.string.tier) + " " + Integer.toString(theQuestion.getTier()));
 
     }
 
@@ -178,7 +193,7 @@ public class GameScreenActivity extends AppCompatActivity {
         currentPoints = userTierInfo.getCurrentPointsForQuestion().get(theQuestion.getAnswer());
         if (currentPoints == null)
             currentPoints = theQuestion.getCurrentPoints();
-        pointsText.setText("Points " + currentPoints);
+        pointsText.setText(getString(R.string.points) + " " + currentPoints);
     }
 
 
@@ -186,10 +201,10 @@ public class GameScreenActivity extends AppCompatActivity {
     public void onBackPressed() {
         Intent intent = new Intent(this, QuestionsActivity.class);
         String chosenTier = tierText.getText().toString().toLowerCase().replace(" ", "");
-        intent.putExtra("chosenTier", chosenTier);
-        intent.putExtra("user", theUser);
-        intent.putExtra("questions", questions);
-        intent.putExtra("soundtrack", soundtrack);
+        intent.putExtra(getString(R.string.chosen_tier), chosenTier);
+        intent.putExtra(getString(R.string.user), theUser);
+        intent.putExtra(getString(R.string.questions), questions);
+        intent.putExtra(getString(R.string.soundtrack), soundtrack);
         startActivity(intent);
         finish();
     }
@@ -207,7 +222,7 @@ public class GameScreenActivity extends AppCompatActivity {
         int i = 0;
         while (i < isHint.length && isHint[i] == true) {
             String hint = theQuestion.getHints().get(i);
-            pointsText.setText("Points " + Integer.toString(currentPoints));
+            pointsText.setText(getString(R.string.points) + " " + Integer.toString(currentPoints));
             if (i == 0)
                 hintText1.setText(hint);
             else if (i == 1)
@@ -223,7 +238,7 @@ public class GameScreenActivity extends AppCompatActivity {
             for (int i = 0; i < userTierInfo.getAnsweredQuestions().size(); i++) {
                 if (theQuestion.getAnswer().equalsIgnoreCase(userTierInfo.getAnsweredQuestions().get(i).getAnswer())) {
                     answerEditText.setFocusable(false);
-                    questionText.setText("The answer is:\n" + theQuestion.getAnswer() + "\nWell done!");
+                    questionText.setText(getString(R.string.answer_prompt) + "\n\n" + theQuestion.getAnswer() + "\n\n" + getString(R.string.well_done));
                     hintBtn.setEnabled(false);
                     submitBtn.setEnabled(false);
                     factsBtn.setEnabled(true);
@@ -235,27 +250,34 @@ public class GameScreenActivity extends AppCompatActivity {
         }
     }
 
-
+    // A method to determine rank based on total points collected.
     private void determineRank(User theUser) {
-        if (theUser.getTotalPoints() >= 50 && theUser.getTotalPoints() < 100)
+        if (theUser.getTotalPoints() >= MIN_GOER && theUser.getTotalPoints() < MAX_GOER)
             theUser.setRank(getString(R.string.rank_2));
-        else if (theUser.getTotalPoints() >= 100 && theUser.getTotalPoints() < 150)
+        else if (theUser.getTotalPoints() >= MAX_GOER && theUser.getTotalPoints() < MAX_PROSPECT)
             theUser.setRank(getString(R.string.rank_3));
-        else if (theUser.getTotalPoints() >= 150 && theUser.getTotalPoints() < 200)
+        else if (theUser.getTotalPoints() >= MAX_PROSPECT && theUser.getTotalPoints() < MAX_BUFF)
             theUser.setRank(getString(R.string.rank_4));
-        else if (theUser.getTotalPoints() >= 200 && theUser.getTotalPoints() < 250)
+        else if (theUser.getTotalPoints() >= MAX_BUFF && theUser.getTotalPoints() < MAX_STUDENT)
             theUser.setRank(getString(R.string.rank_5));
-        else if (theUser.getTotalPoints() >= 250 && theUser.getTotalPoints() < 300)
+        else if (theUser.getTotalPoints() >= MAX_STUDENT && theUser.getTotalPoints() < MAX_PRODIGY)
             theUser.setRank(getString(R.string.rank_6));
-        else if (theUser.getTotalPoints() >= 300 && theUser.getTotalPoints() < 350)
+        else if (theUser.getTotalPoints() >= MAX_PRODIGY && theUser.getTotalPoints() < MAX_SCHOLAR)
             theUser.setRank(getString(R.string.rank_7));
-        else if (theUser.getTotalPoints() >= 350 && theUser.getTotalPoints() < 400)
+        else if (theUser.getTotalPoints() >= MAX_SCHOLAR && theUser.getTotalPoints() < MAX_EXPERT)
             theUser.setRank(getString(R.string.rank_8));
-        else if (theUser.getTotalPoints() >= 400 && theUser.getTotalPoints() < 450)
+        else if (theUser.getTotalPoints() >= MAX_EXPERT && theUser.getTotalPoints() < MAX_GOD)
             theUser.setRank(getString(R.string.rank_9));
-        else if (theUser.getTotalPoints() >= 450 && theUser.getTotalPoints() <= 500)
+        else if (theUser.getTotalPoints() >= MAX_GOD && theUser.getTotalPoints() <= MAX_EBERT)
             theUser.setRank(getString(R.string.rank_10));
 
+    }
+
+
+    private void getFirebaseAndSoundtrackComponents() {
+
+        databaseReference = FirebaseDatabase.getInstance().getReference(getString(R.string.users));
+        soundtrack = (Soundtrack) getIntent().getSerializableExtra(getString(R.string.soundtrack));
 
     }
 

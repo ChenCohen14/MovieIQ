@@ -91,7 +91,7 @@ public class User implements Serializable {
 
     public UserTierInfo getUserTierInfoByTierName(String tierName) {
         for (int i = 0; i < getUserTierInfos().size(); i++) {
-            if (getUserTierInfos().get(i).getTier().equals(tierName))
+            if (getUserTierInfos().get(i).getTier().equalsIgnoreCase(tierName))
                 return getUserTierInfos().get(i);
         }
         return null;

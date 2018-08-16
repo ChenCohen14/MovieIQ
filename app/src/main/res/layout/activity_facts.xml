@@ -21,7 +21,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="183dp"
         android:gravity="center_horizontal"
-        android:text="fact1"
+        android:text="@string/fact1"
         android:textColor="@android:color/black"
         android:textSize="16dp" />
 
@@ -33,7 +33,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
         android:gravity="center_horizontal"
-        android:text="fact2"
+        android:text="@string/fact2"
         android:textColor="@android:color/black"
         android:textSize="16dp" />
 
@@ -45,7 +45,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="50dp"
         android:gravity="center_horizontal"
-        android:text="fact3"
+        android:text="@string/fact3"
         android:textColor="@android:color/black"
         android:textSize="16dp" />
 

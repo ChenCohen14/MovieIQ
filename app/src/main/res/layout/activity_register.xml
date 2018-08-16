@@ -25,33 +25,37 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="@string/username"
             android:gravity="left"
-            android:inputType="textPersonName" />
+            android:hint="@string/username"
+            android:inputType="textPersonName"
+            android:textColor="@android:color/black"
+            android:textColorHint="@android:color/black" />
 
         <EditText
             android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="left"
             android:hint="@string/email"
             android:inputType="textEmailAddress"
             android:maxLines="1"
             android:singleLine="true"
-            android:gravity="left"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:textColorHint="@android:color/black" />
 
         <EditText
             android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:focusableInTouchMode="true"
+            android:gravity="left"
             android:hint="@string/password"
             android:imeOptions="actionUnspecified"
             android:inputType="textPassword"
             android:maxLines="1"
             android:singleLine="true"
-            android:gravity="left"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:textColorHint="@android:color/black" />
 
         <Button
             android:id="@+id/sign_up_button"
