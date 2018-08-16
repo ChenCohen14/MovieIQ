@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.VideoView;
 
@@ -16,6 +17,7 @@ public class ClipActivity extends AppCompatActivity {
     private Uri clipUri;
     private Question q;
     private Soundtrack soundtrack;
+    private ProgressBar pb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +25,8 @@ public class ClipActivity extends AppCompatActivity {
         setContentView(R.layout.activity_clip);
         setRequestedOrientation (ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-
+        pb = findViewById(R.id.progressBarClip);
+        pb.setVisibility(View.VISIBLE);
         soundtrack = (Soundtrack) getIntent().getSerializableExtra("soundtrack");
         soundtrack.getMediaPlayer().pause();
         clipView = (VideoView) findViewById(R.id.clipView);
@@ -34,6 +37,7 @@ public class ClipActivity extends AppCompatActivity {
         clipView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
+                pb.setVisibility(View.GONE);
                 mp.setLooping(true);
             }
         });
