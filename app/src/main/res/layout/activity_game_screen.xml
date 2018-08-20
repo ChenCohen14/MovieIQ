@@ -50,7 +50,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/raiseIQButton"
-        android:layout_alignStart="@+id/pointTextView"
+        android:layout_alignParentEnd="true"
         android:text="@string/hint" />
 
     <Button
@@ -87,24 +87,28 @@
         android:layout_alignEnd="@+id/tierTextView"
         android:layout_below="@+id/questionTextView"
         android:text="@string/hints"
+        android:gravity="left"
         android:textColor="#000000" />
 
     <TextView
         android:id="@+id/hintTextView3"
         android:layout_width="89dp"
         android:layout_height="151dp"
-        android:layout_alignStart="@+id/pointTextView"
-        android:layout_alignTop="@+id/hintTextView1"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/questionTextView"
         android:text="@string/hints"
+        android:gravity="left"
         android:textColor="@android:color/black" />
 
     <TextView
         android:id="@+id/hintTextView2"
         android:layout_width="92dp"
         android:layout_height="151dp"
-        android:layout_alignStart="@+id/questionTextView"
-        android:layout_alignTop="@+id/hintTextView1"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/questionTextView"
+        android:layout_marginStart="16dp"
         android:text="@string/hints"
+        android:gravity="left"
         android:textColor="#000000" />
 
     <Button
