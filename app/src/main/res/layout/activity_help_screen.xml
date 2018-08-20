@@ -15,7 +15,7 @@
         android:id="@+id/helpTextView"
         android:layout_width="347dp"
         android:layout_height="129dp"
-        android:gravity="center"
+        android:textAlignment="textStart"
         android:textColor="@android:color/black"
         android:textSize="16dp"
         tools:layout_editor_absoluteX="19dp"
@@ -28,6 +28,8 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="159dp"
+        android:textAlignment="textStart"
+
         android:textColor="@android:color/black" />
 
     <TextView
@@ -37,6 +39,8 @@
         android:layout_below="@+id/tip1TextView"
         android:layout_centerHorizontal="true"
         android:textColor="@android:color/black"
+        android:textAlignment="textStart"
+
         android:textSize="14dp" />
 
     <TextView
@@ -45,6 +49,8 @@
         android:layout_height="114dp"
         android:layout_below="@+id/tip2TextView"
         android:layout_centerHorizontal="true"
+        android:textAlignment="textStart"
+
         android:textColor="@android:color/black"
         android:textSize="14dp" />
 
@@ -54,6 +60,8 @@
         android:layout_height="78dp"
         android:layout_below="@+id/tip3TextView"
         android:layout_centerHorizontal="true"
+        android:textAlignment="textStart"
+
         android:textColor="@android:color/black"
         android:textSize="14dp" />
 
